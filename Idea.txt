@@ -1,0 +1,50 @@
+Fantasy Soap Opera
+
+CHARACTER - Any active character in the game. Person, monster, dragon, etc
+Statuses
+	Happiness - Affected by other stats, activities (reading, playing, socializing)
+	Hunger
+	Thirst
+	Tiredness
+	Health
+	Libido
+	Stress
+Traits (I WANNA CHANGE THIS)
+	Age
+	Gender
+	Weight
+	Height
+	Fitness
+	Intelligence
+	Beauty
+	Impulsiveness
+	Promiscuousness
+	Chill
+Drives
+	Goals - kill the dragon, master the lute, become the king, etc
+	Wants/Needs - read book, eat sandwich, sleep, etc
+Skills
+	Item - Skilled in this item by amount of X
+	Action - Skilled in this action by amount x
+Preferences - Float between 10 and -10. 10 for loves, 0 for neutral, -10 for hates.
+	Location
+	Item
+	Action
+	Person
+	Gender
+Equipped
+	Worn - Backpack, clothing, armor, etc
+	Held - Right hand has sword, left hand has mace, foot has gun, etc
+
+ACTION(Character c, Value v, Stat s) - Calls an effect method, does have overloads and alternatives.
+	Swing sword, cast spell, move, etc
+
+ITEMS
+	Tag - Equippable, drinkable, eatable, usable, etc
+	Action - Does damage to enemy, reduces hunger by x, increases age by x, etc
+
+BUILDINGS - Location that might or might not do things. Can be entered and left.
+	Think holds infinite water, heals wounds, trains skill, etc
+	Also gates, bridges, magical barriers, etc
+
+WORLD - 2d array of tiles, map of items to locations, map of buildings to locations, all form a world map
