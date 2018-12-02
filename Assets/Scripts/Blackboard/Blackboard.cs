@@ -14,15 +14,37 @@ public static class Blackboard {
         hngr.action = given_action.actions.eat;
         potential_actions.Add(hngr);
 
+        given_action stress = new given_action();
+        stress.value = StressExpert(prsn, ppl, itms);
+        stress.action = given_action.actions.stress;
+        potential_actions.Add(stress);
 
 
-        return new given_action();
+        //sort with reference to the value.
+        potential_actions.Sort((s1, s2) => s2.value.CompareTo(s1.value));
+
+        
+        //TODO: return most important value based on logic. Right now just returns highest vlaue.
+
+        return potential_actions[0];
+        
+    }
+
+    private static float StressExpert(Person prsn, Dictionary<Vector2Int, Person> ppl, Dictionary<Vector2Int, Item> itms)
+    {
+        float ret = 0;
+        
+        ret = prsn.GetStress();
+
+        return ret;
+
     }
 
     private static float HungerExpert(Person prsn, Dictionary<Vector2Int, Person> ppl, Dictionary<Vector2Int, Item> itms)
     {
         float ret = 0;
 
+        ret = prsn.GetHunger();
         return ret;
     }
 
