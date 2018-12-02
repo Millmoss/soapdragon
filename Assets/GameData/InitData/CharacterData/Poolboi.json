@@ -1,0 +1,14 @@
+{
+	"name" 		: "Boy Pool",
+	"physical" 	:
+	[
+		"gender" 	: "male"
+		"hair"		: "blue"
+		"eyes"		: "brown"
+		"muscle"	: 0.5
+		"fat"		: 0.3
+		"height"	: 5.9
+		"weight"	: 207
+		"beauty"	: 0.9
+	]
+}
