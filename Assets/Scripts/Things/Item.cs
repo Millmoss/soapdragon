@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+/* put down like a dog.
 public class Item {
     
     public string name;
@@ -61,3 +61,4 @@ public class Item {
     }
 
 }
+*/
