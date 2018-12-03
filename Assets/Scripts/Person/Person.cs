@@ -264,8 +264,8 @@ public class Person {
             p.like_value = 0.75f;
 
             likes.Add(p);
-        }
-    }
+		}
+	}
 
 }
 

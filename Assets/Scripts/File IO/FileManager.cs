@@ -34,8 +34,6 @@ public class FileManager : MonoBehaviour
 			{
 				data.Add(inFile.ReadLine());
 			}
-
-			List<System.Object> personInfo = (List<System.Object>) deserializeBlade(data);
 		}
 
 		return people;
