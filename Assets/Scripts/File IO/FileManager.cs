@@ -47,15 +47,4 @@ public class FileManager : MonoBehaviour
 
 		return people;
 	}
-
-	public System.Object deserializeBlade(List<string> data)
-	{
-		int lineIndex = 0;
-		Stack<KeyValuePair<int, int>> depth = new Stack<KeyValuePair<int, int>>();
-
-		while (lineIndex != data.Count)
-		{
-
-		}
-	}
 }
