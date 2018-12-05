@@ -14,7 +14,7 @@ public class Main : MonoBehaviour {
     {
 
         List<Person> ppl= new List<Person>();
-        ppl.Add(new Person("Bill", Enums.gndr.Male, new Vector2Int(0, 0), cur_room));
+        ppl.Add(new Person("Bill", Enums.gender.Male, new Vector2Int(0, 0), cur_room));
 
         cur_room.AddPeople(new Vector2Int(0,0), ppl);
 
