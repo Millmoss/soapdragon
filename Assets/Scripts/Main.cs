@@ -7,42 +7,38 @@ public class Main : MonoBehaviour {
     public PrintText txt;
     public Vector2Int boundries;
 
-    Dictionary<Vector2Int, Person> ppl;
-    Dictionary<Vector2Int, Item> objects;
 
+    Place cur_room = new Place(new Rectangle(new Vector2Int(0, 0), 5, 5, 0),"Home");
+    
     private void Start()
     {
-        ppl = new Dictionary<Vector2Int, Person>();
-        objects = new Dictionary<Vector2Int, Item>();
 
-        ppl.Add(new Vector2Int(0,0), new Person("Bill", Person.gndr.Male, new Vector2Int(0,0),this));
-        //ppl.Add(new Vector2Int(2,2), new Person("Janet", Person.gndr.Female));
+        List<Person> ppl= new List<Person>();
+        ppl.Add(new Person("Bill", Enums.gndr.Male, new Vector2Int(0, 0), cur_room));
 
-        objects.Add(new Vector2Int(0, 5), new Item("Ice Cream", given_action.actions.eat, 0.5f,2));
+        cur_room.AddPeople(new Vector2Int(0,0), ppl);
+
+        //This should be instantiated via a file parser, so we don't have to do all this by had soon thank god.
+        List<Thing> thngs = new List<Thing>();
+        thngs.Add(new Thing("Ice Cream", new Vector2Int(0, 5), 200, 2, 0, 2f, 3,
+            new HashSet<Enums.uses>() { Enums.uses.food }, new HashSet<Enums.constraints>() { Enums.constraints.made_from_human_flesh },
+            new HashSet<string>() { "bold", "brash", "belongs", "trash" }
+            ));
+
+        cur_room.AddThings(new Vector2Int(0, 5), thngs);
 
     }
 
-    public void RemoveItem(Vector2Int pos)
-    {
-        objects.Remove(pos);
-    }
 
     private void Update()
     {
         if(Input.GetKeyDown(KeyCode.Space))
         {
+            
             if(txt.IsTextComplete())
-            { 
-                print("D");
-                foreach(Person x in ppl.Values)
-                {
-                    x.Update();
-                    print(x.GetHunger());
-                }
-                foreach (Person x in ppl.Values)
-                {
-                    txt.SetText(x.Action(ppl,objects));
-                }
+            {
+                cur_room.PeopleUpdate();
+                txt.SetText(cur_room.PeopleActivate());
             }
             else
             {

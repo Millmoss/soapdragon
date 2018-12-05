@@ -5,18 +5,18 @@ using UnityEngine;
 
 public static class Blackboard {
     
-    public static given_action GetNextMove(Person prsn, Dictionary<Vector2Int, Person> ppl, Dictionary<Vector2Int, Item> itms)
+    public static given_action GetNextMove(Person prsn)
     {
         List<given_action> potential_actions = new List<given_action>();
 
         given_action hngr = new given_action();
-        hngr.value = HungerExpert(prsn, ppl,itms);
-        hngr.action = given_action.actions.eat;
+        hngr.value = HungerExpert(prsn);
+        hngr.action = Enums.actions.eat;
         potential_actions.Add(hngr);
 
         given_action stress = new given_action();
-        stress.value = StressExpert(prsn, ppl, itms);
-        stress.action = given_action.actions.stress;
+        stress.value = StressExpert(prsn);
+        stress.action = Enums.actions.stress;
         potential_actions.Add(stress);
 
 
@@ -30,7 +30,7 @@ public static class Blackboard {
         
     }
 
-    private static float StressExpert(Person prsn, Dictionary<Vector2Int, Person> ppl, Dictionary<Vector2Int, Item> itms)
+    private static float StressExpert(Person prsn)
     {
         float ret = 0;
         
@@ -40,7 +40,7 @@ public static class Blackboard {
 
     }
 
-    private static float HungerExpert(Person prsn, Dictionary<Vector2Int, Person> ppl, Dictionary<Vector2Int, Item> itms)
+    private static float HungerExpert(Person prsn)
     {
         float ret = 0;
 

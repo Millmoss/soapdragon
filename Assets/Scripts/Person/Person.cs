@@ -7,20 +7,18 @@ public class Person {
 
     private string name;
     private Vector2Int position;
-    private Memory memory;
-
-    //Enums
-    public enum gndr { Male, Female, Nonbinary};
-    public enum clr { red, blue, green, brown, white, black, pink};
-
+    public Memory memory { get; private set; }
+    private Place current_place;
+    
     //Emotions
     private float happiness, stress;
     //Mental
     private float wit, chill, introversion;
     //Physical
-    private gndr gender;
-    private clr hair, eyes;
+    private Enums.gndr gender;
+    private Enums.clr hair, eyes;
     private float muscle, fat, beauty;
+    private int eyesight;
     //height is in meters, weight is in lbs
     private float height, weight;
     //Feeling; -1 for hate, 1 for love.
@@ -29,31 +27,15 @@ public class Person {
     private float hunger, social;
 
     //These are for pathfinding / AI interaction stuff.
-    private Item wanted_object;
+    private Thing wanted_object;
     private Vector2Int moveto_position;
     private given_action current_action;
 
-    private static Item null_object = new Item("NOTHING", given_action.actions.nothing, 0, 0);
+    private static Thing null_object = new Thing("NOTHING", Vector2Int.zero, 0, 0, 0, 0, 0, null, null, null);
 
 
-    //Change this to Room when rooms are implemented.
-    private Main current_room;
 
- 
-    
-
-    public float GetStress()
-    {
-        return stress;
-    }
-
-    public float GetHunger()
-    {
-        return hunger;
-    }
-
-    //Replace Main with Room when Room is implemented.
-    public Person(string _name, gndr _gender, Vector2Int _pos,Main _current_room)
+    public Person(string _name, Enums.gndr _gender, Vector2Int _pos, Place _current_room)
     {
         name = _name;
         happiness = 1;
@@ -63,8 +45,9 @@ public class Person {
         introversion = 0.5f;
 
         gender = _gender;
-        hair = clr.red;
-        eyes = clr.red;
+        hair = Enums.clr.red;
+        eyes = Enums.clr.red;
+        eyesight = 5;
 
         muscle = 0.5f;
         fat = 0.5f;
@@ -78,35 +61,62 @@ public class Person {
         social = 0;
 
         position = _pos;
-        
+
         memory = new Memory();
-        current_room = _current_room;
+        current_place = _current_room;
 
         wanted_object = null;
 
     }
 
-    public void Update()
+    //Each step this function is called; live "updates"
+    public void Update(Dictionary<Vector2Int, List<Person>> ppl, Dictionary<Vector2Int, List<Thing>> thngs)
     {
-        //rn this increases hunger by 0.1.
-        if(hunger<1)
+        Vector2Int checkPos = new Vector2Int();
+        //Check everything in eyesight range, if you find something add it to memory.
+        for (int y = 0; y < eyesight; y++)
+        {
+            checkPos.y = y + 1;
+            for (int x = -y; x <= y; x++)
+            {
+                checkPos.x = x;
+                //First we remove all memory of thigns @ the chcked positions.
+                memory.RemoveAllThings(current_place.name, checkPos);
+
+                //Now we go through and readd everything to to the memory using the new knowledge we have.
+                if (thngs.ContainsKey(checkPos))
+                {
+                    foreach (Thing obj in thngs[checkPos])
+                    {
+                        memory.AddThing(current_place.name, checkPos, obj);
+                    }
+                }
+            }
+        }
+
+
+
+
+        //Tick hunger / social stat.
+        if (hunger < 1)
         {
             hunger += 0.1f;
         }
 
-        if(social < 1)
+        if (social < 1)
         {
-            social += (1.5f - introversion) * 0.1f; 
+            social += (1.5f - introversion) * 0.1f;
         }
     }
 
-    public string Action(Dictionary<Vector2Int, Person> ppl, Dictionary<Vector2Int, Item> itms)
+    //Perform actions based on memory.
+    public string Action()
     {
         string ret = "";
-        ret += PerformAction(ppl, itms);
-        string ps = PerformSpeaking(ppl, itms);
-        if(ps != "")
-        { 
+        ret += PerformAction();
+        string ps = PerformSpeaking();
+        if (ps != "")
+        {
             ret += "\n";
             ret += ps;
         }
@@ -116,20 +126,20 @@ public class Person {
 
 
 
-    private string PerformSpeaking(Dictionary<Vector2Int, Person> ppl, Dictionary<Vector2Int, Item> itms)
+    private string PerformSpeaking()
     {
         string ret = "";
 
         //He wants to talk.
-        if(social > 0.75f)
-        { 
-            if(likes.Count > 0)
+        if (social > 0.75f)
+        {
+            if (likes.Count > 0)
             {
                 //Write algorithmf or this. What do ppl talk about?
                 int randNum = UnityEngine.Random.Range(0, likes.Count);
                 //Noone is around.
                 ret += name + " wants to talk about ";
-                ret += likes[randNum].item.name;
+                ret += likes[randNum].thing.name;
                 ret += " with a like value of ";
                 ret += likes[randNum].like_value;
                 ret += ".";
@@ -144,13 +154,13 @@ public class Person {
         return ret;
     }
 
-    private string PerformAction(Dictionary<Vector2Int, Person> ppl, Dictionary<Vector2Int, Item> itms)
+    private string PerformAction()
     {
-        given_action next_action = Blackboard.GetNextMove(this, ppl, itms);
-        if(current_action.action!=next_action.action)
-        { 
+        given_action next_action = Blackboard.GetNextMove(this);
+        if (current_action.action != next_action.action)
+        {
             current_action = next_action;
-            
+
             return name + " realized he needed to satisfy " + current_action.action + " with a value of " + next_action.value;
         }
         else
@@ -162,66 +172,60 @@ public class Person {
         if (wanted_object == null)
         {
             bool found = false;
-            //If there's an item @ position, do thing.
-            foreach (Vector2Int item_pos in itms.Keys)
+            //If we remmeber there is a item @ position, we set that as the item we want to get to to interact with.
+            if(memory.remember_items.ContainsKey(current_place.name))
             {
-                if(itms[item_pos].GetUse() == next_action.action)
+                foreach (memory_thing item in memory.remember_items[current_place.name])
                 {
-                    found = true;
-                    wanted_object = itms[item_pos];
-                    moveto_position = item_pos;
-                    break;
+                    if (Enums.IsInDictionary(item.thing.uses, current_action.action))
+                    {
+                        found = true;
+                        wanted_object = item.thing;
+                        moveto_position = item.pos_at_place;
+                        break;
+                    }
                 }
             }
-            if(!found)
+            if (!found)
             {
                 wanted_object = null_object;
             }
         }
 
         if (wanted_object != null_object)
-        { 
+        {
 
             //IF we're at the position, do the stuff.
-            if(position == moveto_position)
+            if (position == moveto_position)
             {
-                //How long does it take to do the stuff?
-                current_room.RemoveItem(moveto_position);
+                //How long does it take to do the stuff? Need this functionality.
+                //current_room.RemoveItem(moveto_position);
 
+                //REDO: TODO: What happens when bar is full?
 
-                if (!wanted_object.ObjectDone())
+                //Big switch case odds are? This is EAT
+                if (wanted_object.durability > 0)
                 {
-                    //Apply the change in value at every step.
-                    switch (wanted_object.GetUse())
+                    if (current_action.action == Enums.actions.eat)
                     {
-                        case given_action.actions.eat:
-                            hunger = Mathf.Clamp(hunger - wanted_object.GetStepVal(), 0, 1);
-                            break;
+                        if (hunger < 1)
+                        {
+                            //TODO: Add handling when duravility is 0.
+                            wanted_object.Damage();
+                            hunger = Mathf.Clamp(hunger + wanted_object.nutrition, 0, 1);
 
-                        default:
-                            break;
+                            return name + " is doing action " + next_action.action + " with original intention of " + next_action.value + " onto " + wanted_object.name +
+                                " and his new hunger value is " + hunger + ".";
+                        }
+                        else
+                        {
+                            return name +"'s item is out of durabililty.";
+                        }
                     }
-
-                    //Because you're currently itneracting wiht it, add it to the likes if theres no opinion. 
-                    AddLike(wanted_object);
-
-                    //Tick the time up after you do it.
-                    wanted_object.InteractWith();
-                    return name + " is doing action " + next_action.action + " with original intention of " + next_action.value + " onto "+wanted_object.name+
-                        " and his new hunger value is "+hunger+".";
                 }
                 else
                 {
-                    //Finished doing the stuff, apply changes.
-
-                    current_action.action = given_action.actions.nothing;
-
-                    //Add opinion. This wil
-
-
-                    wanted_object = null;
-
-                    return name + " is finished with action " + next_action.action + " and is ready to do something else, with a hunger value of " + hunger+".";
+                    return FinishedAction();
                 }
 
             }
@@ -234,51 +238,63 @@ public class Person {
         //Move towards item; use actual pathfinding at some point.
         position.y++;
 
+
         return name + " is moving towards the " + wanted_object.name + " at position " + moveto_position +
             " with action " + current_action.action + " with intention " + current_action.value +
-            "\nCurrently "+name+" is at now at position " + position;
-        
-        
+            "\nCurrently " + name + " is at now at position " + position;
+
+
+    }
+
+    //finished action    
+    private string FinishedAction()
+    {
+        //Finished doing the stuff, apply changes.
+        string ret = "";
+        ret = name + " is finished with action " + current_action.action + " and is ready to do something else, with a hunger value of " + hunger + ".";
+
+        current_action.action = Enums.actions.nothing;
+
+        wanted_object = null;
+
+        return ret;
+
     }
 
     //Is there a stored like value?
     private bool HasLike(string x)
     {
-        for(int i= 0;i < likes.Count;i++)
+        for (int i = 0; i < likes.Count; i++)
         {
-            if (likes[i].item.name == x)
+            if (likes[i].thing.name == x)
                 return true;
         }
         return false;
     }
 
     //Adds items rn, prob add other thing later.
-    public void AddLike(Item itm)
+    public void AddLike(Thing itm)
     {
         if (!HasLike(itm.name))
         {
             Preference p = new Preference();
-            p.item = itm;
+            p.thing = itm;
 
             //Write algorithm based on values for this. How do you define things like this?
             p.like_value = 0.75f;
 
             likes.Add(p);
-		}
-	}
+        }
+    }
 
-}
+    public float GetStress()
+    {
+        return stress;
+    }
 
-//Make this support people as well. Thinking of just splitting preferences up to people / items for clarity / ease of use.
-public struct Preference
-{
-    public float like_value;
-    public Item item;
-}
+    public float GetHunger()
+    {
+        return hunger;
+    }
 
-public struct given_action
-{
-    public enum actions { nothing, move, eat, stress };
-    public actions action;
-    public float value;
 }
