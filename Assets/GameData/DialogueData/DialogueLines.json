@@ -1,6 +1,7 @@
 {
 	"opinionDirected" :
 	[
+		"I .feelingVerb you.",
 		"I .feelingVerb your .person.feature.",
 		"I .amountAdverb .feelingVerb your .person.feature.",
 		"Your .person.feature is .amountAdverb .feelingAdjective.",
@@ -26,7 +27,7 @@
 	"insultDirected" :
 	[
 		"You are smelly.",
-		"You want a breath mint? Well you should.",
+		"You need a breath mint.",
 		"You're always the worst.",
 		"You're grandmama's cookies suck.",
 		"You're father had a small peepee."
