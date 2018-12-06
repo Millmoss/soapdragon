@@ -25,7 +25,7 @@ public class NotMain : MonoBehaviour
 		print(l4.getLineString());
 		*/
 
-		Person billiam = new Person("Billiam", Enums.gender.Male, new Vector2Int(0, 0), null);
+		Person billiam = new Person("Billiam", Enums.gender.Male, new Vector2Int(0, 0), null,);
 
 
 

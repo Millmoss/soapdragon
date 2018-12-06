@@ -18,13 +18,16 @@ public class Person {
     Dictionary<string, float> needs = new Dictionary<string, float>()
     {
         {"hunger", 0 },
-        {"social", 0 }
+        {"social", 0 },
+        {"thrist",0 },
+        {"tiredness",0 },
+        {"stress", 0f },
+        {"libido", 0f }
     };
 
     Dictionary<string,float> features_float = new Dictionary<string, float>() {
         //emotions
         {"happiness", 0.5f },
-        {"stress", 0.5f },
         //mental
         {"wit",  0.5f },
         {"chill", 0.5f },
@@ -82,7 +85,7 @@ public class Person {
         likes_traits = _likes_traits;
     }
 
-    //Returns true if the person has the given trait.
+    //Returns true if a person's feature has the given value.
     public bool HasFeature(string feature, string value)
     {
         if(features_string.ContainsKey(feature))
@@ -93,7 +96,7 @@ public class Person {
         return false; 
     }
 
-    //Returns true if the person has the given trait.
+    //Returns true if a person's feature has the given value.
     public bool HasFeature(string feature, float value)
     {
         if (features_float.ContainsKey(feature))
@@ -105,7 +108,8 @@ public class Person {
         return false;
     }
 
-    //Return closest trait thisperson has feeling towards person prsm towards w float feeling.
+    //Return closest trait thisperson has feeling towards person prsn towards w float feeling.
+    //Always returns a value. 
     public string GetMatchingFeature(Person prsn, float feeling)
     {
         float dif = float.MaxValue;
