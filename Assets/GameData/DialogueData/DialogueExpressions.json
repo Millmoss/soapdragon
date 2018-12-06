@@ -1,0 +1,10 @@
+{
+	"comment" : ["In the lists of verbs/adjectives, they are ordered by negative to positive, so a value with a higher index is more positive. Always odd number of elements, middle element is neutral."],
+	
+	"feelingVerb" 			: [ "despise", "hate", "dislike", "blarg", "like", "adore", "love" ],
+	"feelingAdjective" 		: [ "most terrible", "terrible", "bad", "meh", "good", "great", "amazing" ],
+	
+	"amountAdverb" 			: [ "just barely", "barely", "kind of", "fucking", "really", "really really", "completely" ],
+	
+	"agreementVerb" 		: [ "disagree", "neither agree nor disagree", "agree" ]
+}

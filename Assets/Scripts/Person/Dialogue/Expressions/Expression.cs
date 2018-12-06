@@ -4,5 +4,6 @@ using UnityEngine;
 
 public class Expression
 {
-	
+	public string expression { get; protected set; }
+
 }
