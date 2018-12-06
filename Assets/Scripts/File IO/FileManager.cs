@@ -8,12 +8,28 @@ public class FileManager : MonoBehaviour
 
 	void Start ()
 	{
-		initPersons();
+		//initPersons();
+		initLines();
 	}
 	
 	void Update ()
 	{
 		
+	}
+
+	public void initLines()
+	{
+		string data = "";
+
+		System.IO.StreamReader inFile = new System.IO.StreamReader(@"Assets\GameData\DialogueData\DialogueLines.json");
+		while (!inFile.EndOfStream)
+		{
+			data += inFile.ReadLine();
+		}
+
+		LineLibrary l = LineLibrary.CreateFromJSON(data);
+		
+		print(l.opinionDirected[0]);
 	}
 
 	public List<Person> initPersons()

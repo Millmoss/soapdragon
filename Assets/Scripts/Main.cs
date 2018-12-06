@@ -14,7 +14,7 @@ public class Main : MonoBehaviour {
     {
 
         List<Person> ppl= new List<Person>();
-        ppl.Add(new Person("Bill", Enums.gndr.Male, new Vector2Int(0, 0), cur_room));
+        ppl.Add(new Person("Bill", Enums.gender.Male, new Vector2Int(0, 0), cur_room));
 
         cur_room.AddPeople(new Vector2Int(0,0), ppl);
 
@@ -66,6 +66,19 @@ public class Main : MonoBehaviour {
             {
                 txt.SetText("");
             }
+        }
+        if(Input.GetKeyDown(KeyCode.P))
+        {
+            List<Vector2Int> x = Pathfinding.GetPath(new Vector2Int(2, 2),
+                new Vector2Int(4, 5 ),
+                new List<Vector2Int>() { new Vector2Int(0, 4) },
+                new Vector2Int(15,15));
+
+            foreach(Vector2Int p in x)
+            {
+                Debug.Log(p);
+            }
+
         }
     }
 

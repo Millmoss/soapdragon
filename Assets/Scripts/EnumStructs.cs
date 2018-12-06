@@ -3,16 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public static class Enums  {
-    public enum uses { food }
+    public enum uses		{ food }
     public enum constraints { made_from_human_flesh }
+
     public enum actions { nothing, move, eat, stress };
-    public enum rotations {  N, NW, W, SW, S ,SE, E, NE};
+    public enum rotations { N, W, S, E };
 
-    public enum gndr { Male, Female, Nonbinary };
-    public enum clr { red, blue, green, brown, white, black, pink };
+	public enum gender		{ Male, Female, Nonbinary };
+    public enum color		{ red, blue, green, brown, white, black, pink };
+	public enum descriptors { hostile, friendly, helpful, harmful, dangerous, safe }	//there will be a LOT of these, keeping it low for now
 
-    //Checks all related actions to their uses they want; e.g. eat wants food.
-    public static Dictionary<actions,List<uses>> action_to_uses = new Dictionary<actions, List<uses>>() {
+	//Checks all related actions to their uses they want; e.g. eat wants food.
+	public static Dictionary<actions,List<uses>> action_to_uses = new Dictionary<actions, List<uses>>() {
+
         {
             actions.eat, new List<uses>(){uses.food}
         }

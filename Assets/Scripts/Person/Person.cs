@@ -16,8 +16,8 @@ public class Person {
     //Mental
     private float wit, chill, introversion;
     //Physical
-    private Enums.gndr gender;
-    private Enums.clr hair, eyes;
+    private Enums.gender gender;
+    private Enums.color hair, eyes;
     private float muscle, fat, beauty;
     private int eyesight;
     //height is in meters, weight is in lbs
@@ -36,7 +36,7 @@ public class Person {
 
 
 
-    public Person(string _name, Enums.gndr _gender, Vector2Int _pos, Place _current_room)
+    public Person(string _name, Enums.gender _gender, Vector2Int _pos, Place _current_room)
     {
         name = _name;
         happiness = 1;
@@ -46,8 +46,8 @@ public class Person {
         introversion = 0.5f;
 
         gender = _gender;
-        hair = Enums.clr.red;
-        eyes = Enums.clr.red;
+        hair = Enums.color.red;
+        eyes = Enums.color.red;
         eyesight = 5;
 
         muscle = 0.5f;
