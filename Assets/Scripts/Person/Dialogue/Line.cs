@@ -6,9 +6,11 @@ public class Line
 {
 	private Expression[] line;
 	private HashSet<Enums.descriptors> keys;
+	public Enums.lineTypes type { get; private set; }
 
-	public Line(Expression[] l)
+	public Line(Expression[] l, Enums.lineTypes t)
 	{
+		type = t;
 		line = l;
 		keys = new HashSet<Enums.descriptors>();
 
@@ -88,6 +90,11 @@ public class Line
 
 		if (keys.Count < 2)
 			feeling *= 2;
+
+		if (type == Enums.lineTypes.threatDirected)
+			feeling = -1f;
+		else if (type == Enums.lineTypes.insultDirected)
+			feeling = -.6f;
 
 		return feeling;
 	}

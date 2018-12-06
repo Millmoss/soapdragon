@@ -42,7 +42,7 @@ public class Conversation
 			}
 		}
 
-		Line l = new Line(eList);
+		Line l = new Line(eList, type);
 		return l;
 	}
 
@@ -71,7 +71,7 @@ public class Conversation
 			}
 		}
 
-		Line l = new Line(eList);
+		Line l = new Line(eList, type);
 		return l;
 	}
 
@@ -151,7 +151,7 @@ public class Conversation
 						d = Enums.descriptors.loving;
 					else if (feeling > .0f)     //these are not mutually exclusive or anything, fix this later for sure
 						d = Enums.descriptors.friendly;
-					else if (feeling < -.66f)
+					else if (feeling < -.666f)
 						d = Enums.descriptors.hostile;
 					else
 						d = Enums.descriptors.safe;
