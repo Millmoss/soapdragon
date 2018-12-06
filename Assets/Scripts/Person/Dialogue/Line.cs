@@ -9,18 +9,22 @@ public class Line
 
 	public Line(Expression[] l)
 	{
-		line = (Expression[]) l.Clone();
+		line = l;
+		keys = new HashSet<Enums.descriptors>();
+
 		for (int i = 0; i < line.Length; i++)
 		{
 			if (line[i] is Verb)
 			{
-				for (int k = 0; k < ((Verb)line[i]).descriptors.Length; k++)
-					keys.Add(((Verb)line[i]).descriptors[k]);
+				if (((Verb)line[i]).descriptors.Length > 0 && ((Verb)line[i]) != null)
+					for (int k = 0; k < ((Verb)line[i]).descriptors.Length; k++)
+						keys.Add(((Verb)line[i]).descriptors[k]);
 			}
 			else if (line[i] is Adjective)
 			{
-				for (int k = 0; k < ((Adjective)line[i]).descriptors.Length; k++)
-					keys.Add(((Adjective)line[i]).descriptors[k]);
+				if (((Adjective)line[i]).descriptors.Length > 0 && ((Adjective)line[i]) != null)
+					for (int k = 0; k < ((Adjective)line[i]).descriptors.Length; k++)
+						keys.Add(((Adjective)line[i]).descriptors[k]);
 			}
 		}
 	}

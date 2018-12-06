@@ -42,10 +42,9 @@
 		"I know where you're grandmama lives."
 	],
 	
-	"opinionOpinionAdverb" :
+	"opinionOpinionSimple" :
 	[
 		"I .agreementVerb.",
-		"I .agreementVerb .amountAdverb.",
 		"I .amountAdverb .agreementVerb."
 	],
 	
@@ -72,6 +71,6 @@
 	[
 		"Oh shit.",
 		"Well fuck.",
-		"..."
+		"Uhhhh."
 	]
 }

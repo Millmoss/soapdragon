@@ -36,6 +36,10 @@ public class Conversation
 				Expression e = determineExpression(from, to, person, feeling, lineStrings[i], type, lower);
 				eList[i] = e;
 			}
+			else
+			{
+				eList[i] = new Expression(lineStrings[i]);
+			}
 		}
 
 		Line l = new Line(eList);
@@ -60,6 +64,10 @@ public class Conversation
 			{
 				Expression e = determineExpression(from, to, null, feeling, lineStrings[i], type, lower);
 				eList[i] = e;
+			}
+			else
+			{
+				eList[i] = new Expression(lineStrings[i]);
 			}
 		}
 
@@ -96,7 +104,7 @@ public class Conversation
 				type = Enums.lineTypes.threatDirected;
 			else if (feeling < -.35f)
 				type = Enums.lineTypes.insultDirected;
-			else if (feeling < .4f)
+			else
 				type = Enums.lineTypes.opinionOpinionSimple;
 		}
 
@@ -105,7 +113,7 @@ public class Conversation
 
 	public Expression determineExpression(Person from, Person to, Person person, float feeling, string tempExpression, Enums.lineTypes type, int lowerBound)
 	{
-		Expression e = new Expression();
+		Expression e = new Expression("BAD");
 
 		switch (tempExpression)
 		{
@@ -200,6 +208,7 @@ public class Conversation
 				}
 				default:
 				{
+					NotMain.print(tempExpression);
 					break;
 				}
 		}
