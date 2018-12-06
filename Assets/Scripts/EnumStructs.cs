@@ -39,7 +39,7 @@ public static class Enums  {
 
 public struct memory_person
 {
-    public Person thing;
+    public Person person;
     public Vector2Int pos_at_place;
 }
 
@@ -49,10 +49,16 @@ public struct memory_thing
     public Vector2Int pos_at_place;
 }
 
-public struct Preference
+public struct Preference_Things
 {
     public float like_value;
     public Thing thing;
+}
+
+public struct Preference_People
+{
+    public float like_value;
+    public Person person;
 }
 
 public struct given_action

@@ -34,7 +34,7 @@ public static class Blackboard {
     {
         float ret = 0;
         
-        ret = prsn.stress;
+        ret = prsn.GetNeedValue("stress");
 
         return ret;
 
@@ -44,7 +44,7 @@ public static class Blackboard {
     {
         float ret = 0;
 
-        ret = prsn.hunger;
+        ret = prsn.GetNeedValue("hunger");
         return ret;
     }
 

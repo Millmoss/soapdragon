@@ -12,9 +12,14 @@ public class Main : MonoBehaviour {
     
     private void Start()
     {
+        Dictionary<KeyValuePair<string,string>, float> trait_likes = new Dictionary<KeyValuePair<string,string>, float>()
+        {
+            {new KeyValuePair<string, string>("gender","Male"), 0.86f},
+            {new KeyValuePair<string, string>("hair","red"), 0.86f}
+        };
 
         List<Person> ppl= new List<Person>();
-        ppl.Add(new Person("Bill", Enums.gender.Male, new Vector2Int(0, 0), cur_room));
+        ppl.Add(new Person("Bill", Enums.gender.Male, new Vector2Int(0, 0), cur_room, trait_likes));
 
         cur_room.AddPeople(new Vector2Int(0,0), ppl);
 

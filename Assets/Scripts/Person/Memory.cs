@@ -25,6 +25,35 @@ public class Memory {
         remember_people = new Dictionary<string, List<memory_person>>();
     }
 
+    public List<Thing> GetThings(string place_name)
+    {
+        List<Thing> t = new List<Thing>();
+        if (remember_items.ContainsKey(place_name))
+        {
+            foreach (memory_thing x in remember_items[place_name])
+            {
+                t.Add(x.thing);
+            }
+        }
+        return t;
+    }
+
+        //Add a person to the memory of people. 
+        public void AddPerson(string place_name, Vector2Int pos, Person obj)
+    {
+        memory_person tmp = new memory_person();
+        tmp.pos_at_place = pos;
+        tmp.person = obj;
+        if (remember_people.ContainsKey(place_name))
+        {
+            remember_people[place_name].Add(tmp);
+        }
+        else
+        {
+            remember_people[place_name] = new List<memory_person>() { tmp };
+        }
+    }
+
     //Add a thing to the memory of things. 
     public void AddThing(string place_name, Vector2Int pos, Thing obj)
     {
@@ -97,6 +126,33 @@ public class Memory {
             foreach(memory_thing remove in rmv)
             {
                 remember_items[place_name].Remove(remove);
+            }
+
+            return removed;
+        }
+    }
+
+    //Removes all things at the given position. Returns true if things were removed.
+    public bool RemoveAllPeople(string place_name, Vector2Int pos)
+    {
+        if (!remember_people.ContainsKey(place_name))
+            return false;
+        else
+        {
+            bool removed = false;
+            List<memory_person> rmv = new List<memory_person>();
+            foreach (memory_person x in remember_people[place_name])
+            {
+                if (x.pos_at_place == pos)
+                {
+                    removed = true;
+                    rmv.Add(x);
+                }
+            }
+
+            foreach (memory_person remove in rmv)
+            {
+                remember_people[place_name].Remove(remove);
             }
 
             return removed;
