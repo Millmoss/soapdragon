@@ -16,8 +16,7 @@ public class Person {
     //Mental
     private float wit, chill, introversion;
     //Physical
-    private Enums.gender gender;
-    private Enums.color hair, eyes;
+    private string gender, hair, eyes;
     private float muscle, fat, beauty;
     private int eyesight;
     //height is in meters, weight is in lbs
@@ -45,9 +44,9 @@ public class Person {
         chill = 0.5f;
         introversion = 0.5f;
 
-        gender = _gender;
-        hair = Enums.color.red;
-        eyes = Enums.color.red;
+        gender = _gender.ToString();
+        hair = Enums.color.red.ToString();
+        eyes = Enums.color.red.ToString();
         eyesight = 5;
 
         muscle = 0.5f;

@@ -2,9 +2,9 @@
 	"opinionDirected" :
 	[
 		"I .feelingVerb your .person.feature.",
-		"I .amountSimple .feelingVerb your .person.feature.",
-		"Your .person.feature is .amountSimple .feelingAdjective.",
-		"You are .amountSimple .feelingAdjective."
+		"I .amountAdverb .feelingVerb your .person.feature.",
+		"Your .person.feature is .amountAdverb .feelingAdjective.",
+		"You are .amountAdverb .feelingAdjective."
 	],
 	
 	"opinionUndirected" :
@@ -12,9 +12,9 @@
 		"I .feelingVerb .noun.",
 		"I .feelingVerb .noun.feature.",
 		"I .feelingVerb .noun's .noun.feature.",
-		"I .amountSimple .feelingVerb .noun.",
-		"I .amountSimple .feelingVerb .noun.feature.",
-		"I .amountSimple .feelingVerb .noun's .noun.feature."
+		"I .amountAdverb .feelingVerb .noun.",
+		"I .amountAdverb .feelingVerb .noun.feature.",
+		"I .amountAdverb .feelingVerb .noun's .noun.feature."
 	],
 	
 	"requestDirected" :
@@ -41,11 +41,11 @@
 		"I know where you're grandmama lives."
 	],
 	
-	"opinionOpinionSimple" :
+	"opinionOpinionAdverb" :
 	[
 		"I .agreementVerb.",
-		"I .agreementVerb .amountSimple.",
-		"I .amountSimple .agreementVerb."
+		"I .agreementVerb .amountAdverb.",
+		"I .amountAdverb .agreementVerb."
 	],
 	
 	"questionReason" :

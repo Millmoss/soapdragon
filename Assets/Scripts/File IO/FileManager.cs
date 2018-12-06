@@ -2,22 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FileManager : MonoBehaviour
+public static class FileManager
 {
-	
-
-	void Start ()
-	{
-		//initPersons();
-		initLines();
-	}
-	
-	void Update ()
-	{
-		
-	}
-
-	public void initLines()
+	public static LineLibrary initLines()
 	{
 		string data = "";
 
@@ -27,12 +14,25 @@ public class FileManager : MonoBehaviour
 			data += inFile.ReadLine();
 		}
 
-		LineLibrary l = LineLibrary.CreateFromJSON(data);
-		
-		print(l.opinionDirected[0]);
+		LineLibrary ll = LineLibrary.CreateFromJSON(data);
+		return ll;
 	}
 
-	public List<Person> initPersons()
+	public static ExpressionLibrary initExpressions()
+	{
+		string data = "";
+
+		System.IO.StreamReader inFile = new System.IO.StreamReader(@"Assets\GameData\DialogueData\DialogueExpressions.json");
+		while (!inFile.EndOfStream)
+		{
+			data += inFile.ReadLine();
+		}
+
+		ExpressionLibrary el = ExpressionLibrary.CreateFromJSON(data);
+		return el;
+	}
+
+	public static List<Person> initPersons()
 	{
 		List<Person> people = new List<Person>();
 
@@ -55,7 +55,7 @@ public class FileManager : MonoBehaviour
 		return people;
 	}
 
-	public List<Person> loadPersons()
+	public static List<Person> loadPersons()
 	{
 		List<Person> people = new List<Person>();
 

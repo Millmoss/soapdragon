@@ -71,8 +71,8 @@ public class Main : MonoBehaviour {
         {
             List<Vector2Int> x = Pathfinding.GetPath(new Vector2Int(2, 2),
                 new Vector2Int(4, 5 ),
-                new List<Vector2Int>() { new Vector2Int(0, 4) },
-                new Vector2Int(15,15));
+                new List<Vector2Int>() { new Vector2Int(3, 5), new Vector2Int(4,4), new Vector2Int(4,6) },
+                new Vector2Int(4,4));
 
             foreach(Vector2Int p in x)
             {
