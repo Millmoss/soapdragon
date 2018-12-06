@@ -5,31 +5,42 @@ using UnityEngine;
 
 public class Person {
 
-    private string name;
-    private Vector2Int position;
-    private Enums.rotations rotation;
-    public Memory memory { get; private set; }
-    private Place current_place;
-    
-    //Emotions
-    private float happiness, stress;
-    //Mental
-    private float wit, chill, introversion;
-    //Physical
-    private string gender, hair, eyes;
-    private float muscle, fat, beauty;
-    private int eyesight;
-    //height is in meters, weight is in lbs
-    private float height, weight;
-    //Feeling; -1 for hate, 1 for love.
-    private List<Preference> likes;
-    //Motivators
-    private float hunger, social;
 
-    //These are for pathfinding / AI interaction stuff.
-    private Thing wanted_object;
-    private Vector2Int moveto_position;
-    private given_action current_action;
+	public string name { get; private set; }
+	private Vector2Int position;
+    private Enums.rotations rotation;
+	public Memory memory { get; private set; }
+	public Place current_place { get; private set; }
+
+	//Emotions
+	public float happiness { get; private set; }
+	public float stress { get; private set; }
+	//Mental
+	public float wit { get; private set; }
+	public float chill{ get; private set; }
+	public float introversion { get; private set; }
+
+    //Physical
+    public string gender { get; private set; }
+	public string hair { get; private set; }
+	public string eyes { get; private set; }
+    public float muscle { get; private set; }
+	public float fat { get; private set; }
+	public float beauty { get; private set; }
+    public int eyesight { get; private set; }
+	//height is in meters, weight is in lbs
+	public float height { get; private set; }
+	public float weight { get; private set; }
+	//Feeling; -1 for hate, 1 for love.
+	private List<Preference> likes;
+	//Motivators
+	public float hunger { get; private set; }
+	public float social { get; private set; }
+
+	//These are for pathfinding / AI interaction stuff.
+	private Thing wanted_object;
+	private Vector2Int moveto_position;
+	private given_action current_action;
 
     private static Thing null_object = new Thing("NOTHING", Vector2Int.zero, 0, 0, 0, 0, 0, null, null, null);
 
@@ -314,14 +325,13 @@ public class Person {
         }
     }
 
-    public float GetStress()
-    {
-        return stress;
-    }
+	public Vector2Int Position
+	{
+		get { return new Vector2Int(position.x, position.y); }
+	}
 
-    public float GetHunger()
-    {
-        return hunger;
-    }
-
+	public List<Preference> Likes
+	{
+		get { return new List<Preference>(likes); }
+	}
 }
