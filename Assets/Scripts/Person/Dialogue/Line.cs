@@ -10,5 +10,6 @@ public class Line
 	public Line(Expression[] l)
 	{
 		line = (Expression[]) l.Clone();
+		//for (int i = 0
 	}
 }

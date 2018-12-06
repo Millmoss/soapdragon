@@ -9,7 +9,7 @@ public static class Enums  {
 	
 	public enum gender		{ Male, Female, Nonbinary };
     public enum color		{ red, blue, green, brown, white, black, pink };
-	public enum descriptors { hostile, friendly, helpful, harmful, dangerous, safe, agreeable, disagreeable }    //there will be a LOT of these, keeping it low for now
+	public enum descriptors { hostile, friendly, helpful, harmful, dangerous, safe, agreeable, disagreeable, loving }    //there will be a LOT of these, keeping it low for now
 
 	public enum lineTypes	{ opinionDirected, opinionUndirected, requestDirected, insultDirected, threatDirected, opinionOpinionSimple, questionReason, answerRequest, answerDanger }
 	public enum expressionTypes	{ feelingVerb, feelingAdjective, amountAdverb, agreementVerb }
