@@ -1,86 +1,76 @@
 {
-	"independent" : 
-	{
-		"comment" : "These lines do not have any dialogue prerequisites.",
-		
-		"opinionDirected" :
-		[
-			[ "I ", ".feeling.verb", " your ", ".person.feature", "." ],
-			[ "I ", ".amount.simple", " ", ".feeling.verb", " your ", ".person.feature", "." ],
-			[ "Your ", ".feature", " is ", ".amount.simple", " ", ".feeling.adjective" ],
-			[ "You are ", ".amount.simple", " ", ".feeling.adjective" ]
-		],
-		
-		"opinionUndirected" :
-		[
-			[ "I ", ".feeling.verb", " ", ".noun", "." ],
-			[ "I ", ".feeling.verb", " ", ".noun.feature", "." ],
-			[ "I ", ".feeling.verb", " ", ".noun", "'s ", ".noun.feature", "." ],
-			[ "I ", ".amount.simple", " ", ".feeling.verb", " ", ".noun", "." ],
-			[ "I ", ".amount.simple", " ", ".feeling.verb", " ", ".noun.feature", "." ],
-			[ "I ", ".amount.simple", " ", ".feeling.verb", " ", ".noun", "'s ", ".noun.feature", "." ]
-		],
-		
-		"requestDirected" :
-		[
-			[ "Please help!" ],
-			[ "Please do not help!" ]
-		]
-		
-		"insultDirected" :
-		[
-			[ "You are smelly." ],
-			[ "You want a breath mint? Well you should." ],
-			[ "You're always the worst." ],
-			[ "You're grandmama's cookies suck." ],
-			[ "You're father had a small peepee." ]
-		]
-		
-		"threatDirected" :
-		[
-			[ "I oughtta kill you." ],
-			[ "You see this ", ".noun", "? It's gonna be the last thing you see when I kill you with it." ],
-			[ "I'm gonna murder your goddamn two-timing bitch of a grandmama. Then I'm gonna murder you." ],
-			[ "I know where you live." ],
-			[ "I know where you're grandmama lives." ]
-		]
-	},
+	"opinionDirected" :
+	[
+		"I .feelingVerb your .person.feature.",
+		"I .amountSimple .feelingVerb your .person.feature.",
+		"Your .person.feature is .amountSimple .feelingAdjective.",
+		"You are .amountSimple .feelingAdjective."
+	],
 	
-	"dependent" :
-	{
-		"comment" : "These lines are used in response to other dialogue lines.",
-		
-		"opinionOpinionSimple" :
-		[
-			[ "I ", ".agreement.verb", "."],
-			[ "I ", ".agreement.verb", " ", ".amount.simple", "." ],
-			[ "I ", ".amount.simple", " ", ".agreement.verb", "." ]
-		],
-		
-		"questionReason" :
-		[
-			[ "Why?" ],
-			[ "Why?" ],
-			[ "Why?" ],
-			[ "Can you explain?" ],
-			[ "Can you explain?" ],
-			[ "Can you explain?" ],
-			[ "What?" ],
-			[ "What?" ],
-			[ "The fuck you saying?" ]
-		]
-		
-		"answerRequest" :
-		[
-			[ "Yes!" ],
-			[ "No!" ]
-		]
-		
-		"answerDanger" :
-		[
-			[ "Oh shit." ],
-			[ "Well fuck." ],
-			[ "..." ]
-		]
-	}
+	"opinionUndirected" :
+	[
+		"I .feelingVerb .noun.",
+		"I .feelingVerb .noun.feature.",
+		"I .feelingVerb .noun's .noun.feature.",
+		"I .amountSimple .feelingVerb .noun.",
+		"I .amountSimple .feelingVerb .noun.feature.",
+		"I .amountSimple .feelingVerb .noun's .noun.feature."
+	],
+	
+	"requestDirected" :
+	[
+		"Please help!",
+		"Please do not help!"
+	],
+	
+	"insultDirected" :
+	[
+		"You are smelly.",
+		"You want a breath mint? Well you should.",
+		"You're always the worst.",
+		"You're grandmama's cookies suck.",
+		"You're father had a small peepee."
+	],
+	
+	"threatDirected" :
+	[
+		"I oughtta kill you.",
+		"You see this .noun? It's gonna be the last thing you see.",
+		"I'm gonna murder your goddamn two-timing bitch of a grandmama. Then I'm gonna murder you.",
+		"I know where you live.",
+		"I know where you're grandmama lives."
+	],
+	
+	"opinionOpinionSimple" :
+	[
+		"I .agreementVerb.",
+		"I .agreementVerb .amountSimple.",
+		"I .amountSimple .agreementVerb."
+	],
+	
+	"questionReason" :
+	[
+		"Why?",
+		"Why?",
+		"Why?",
+		"Can you explain?",
+		"Can you explain?",
+		"Can you explain?",
+		"What?",
+		"What?",
+		"The fuck you saying?"
+	],
+	
+	"answerRequest" :
+	[
+		"Yes!",
+		"No!"
+	],
+	
+	"answerDanger" :
+	[
+		"Oh shit.",
+		"Well fuck.",
+		"..."
+	]
 }
