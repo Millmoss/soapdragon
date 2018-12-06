@@ -6,6 +6,7 @@ public static class Enums  {
     public enum uses { food }
     public enum constraints { made_from_human_flesh }
     public enum actions { nothing, move, eat, stress };
+    public enum rotations {  N, NW, W, SW, S ,SE, E, NE};
 
     public enum gndr { Male, Female, Nonbinary };
     public enum clr { red, blue, green, brown, white, black, pink };

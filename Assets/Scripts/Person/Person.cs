@@ -7,6 +7,7 @@ public class Person {
 
     private string name;
     private Vector2Int position;
+    private Enums.rotations rotation;
     public Memory memory { get; private set; }
     private Place current_place;
     
@@ -65,6 +66,8 @@ public class Person {
         memory = new Memory();
         current_place = _current_room;
 
+        rotation = Enums.rotations.W;
+
         wanted_object = null;
 
     }
@@ -72,22 +75,39 @@ public class Person {
     //Each step this function is called; live "updates"
     public void Update(Dictionary<Vector2Int, List<Person>> ppl, Dictionary<Vector2Int, List<Thing>> thngs)
     {
+
         Vector2Int checkPos = new Vector2Int();
         //Check everything in eyesight range, if you find something add it to memory.
+        int comp = 1;
+        if (rotation == Enums.rotations.S)
+            comp *= -1;
         for (int y = 0; y < eyesight; y++)
         {
-            checkPos.y = y + 1;
+            if (rotation == Enums.rotations.N || rotation == Enums.rotations.S)
+                checkPos.y = y + 1;
+            else
+                checkPos.x = y + 1;
+            checkPos.y *= comp;
             for (int x = -y; x <= y; x++)
             {
-                checkPos.x = x;
+                if (rotation == Enums.rotations.N || rotation == Enums.rotations.S)
+                    checkPos.x = x;
+                else
+                    checkPos.y = x;
+
+                
+                
                 //First we remove all memory of thigns @ the chcked positions.
                 memory.RemoveAllThings(current_place.name, checkPos);
 
                 //Now we go through and readd everything to to the memory using the new knowledge we have.
                 if (thngs.ContainsKey(checkPos))
                 {
+                    Debug.Log("Found!");
+                    Debug.Log(checkPos);
                     foreach (Thing obj in thngs[checkPos])
                     {
+                        Debug.Log("D");
                         memory.AddThing(current_place.name, checkPos, obj);
                     }
                 }
@@ -168,15 +188,23 @@ public class Person {
             current_action.value = next_action.value;
         }
         //Basic movement algorithm
-
+        if(wanted_object!=null)
+            Debug.Log(wanted_object.name);
         if (wanted_object == null)
         {
+            Debug.Log("Is null!");
+            Debug.Log(memory.remember_items.Count);
             bool found = false;
+            foreach(string x in memory.remember_items.Keys)
+            {
+                Debug.Log(x);
+            }
             //If we remmeber there is a item @ position, we set that as the item we want to get to to interact with.
             if(memory.remember_items.ContainsKey(current_place.name))
             {
                 foreach (memory_thing item in memory.remember_items[current_place.name])
                 {
+                    Debug.Log(item.thing.name);
                     if (Enums.IsInDictionary(item.thing.uses, current_action.action))
                     {
                         found = true;
@@ -219,13 +247,13 @@ public class Person {
                         }
                         else
                         {
-                            return name +"'s item is out of durabililty.";
+                            return FinishedAction();
                         }
                     }
                 }
                 else
                 {
-                    return FinishedAction();
+                    return name + "'s item is out of durabililty.";
                 }
 
             }

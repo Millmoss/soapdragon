@@ -25,7 +25,29 @@ public class Main : MonoBehaviour {
             new HashSet<string>() { "bold", "brash", "belongs", "trash" }
             ));
 
+        List<Thing> bing = new List<Thing>();
+        bing.Add(new Thing("Vice Meme", new Vector2Int(0, -5), 200, 2, 0, 2f, 3,
+            new HashSet<Enums.uses>() { Enums.uses.food }, new HashSet<Enums.constraints>() { Enums.constraints.made_from_human_flesh },
+            new HashSet<string>() { "bold", "brash", "belongs", "trash" }
+            ));
+
+        List<Thing> ying = new List<Thing>();
+        ying.Add(new Thing("West is left", new Vector2Int(0, -5), 200, 2, 0, 2f, 3,
+            new HashSet<Enums.uses>() { Enums.uses.food }, new HashSet<Enums.constraints>() { Enums.constraints.made_from_human_flesh },
+            new HashSet<string>() { "bold", "brash", "belongs", "trash" }
+            ));
+
+
+        List<Thing> ding = new List<Thing>();
+        ding.Add(new Thing("East is soggy", new Vector2Int(0, -5), 200, 2, 0, 2f, 3,
+            new HashSet<Enums.uses>() { Enums.uses.food }, new HashSet<Enums.constraints>() { Enums.constraints.made_from_human_flesh },
+            new HashSet<string>() { "bold", "brash", "belongs", "trash" }
+            ));
+
         cur_room.AddThings(new Vector2Int(0, 5), thngs);
+        cur_room.AddThings(new Vector2Int(0, -5), bing);
+        cur_room.AddThings(new Vector2Int(-5, 0), ying);
+        cur_room.AddThings(new Vector2Int(5, 0), ding);
 
     }
 
