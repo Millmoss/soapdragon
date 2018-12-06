@@ -80,7 +80,7 @@ public class Conversation
 		Enums.lineTypes type = Enums.lineTypes.answerDanger;
 
 		if (feeling < 0)	//this prevents people with high chill from threatening people cause that's not chill at all
-			feeling += from.chill / 2;
+			feeling += from.GetFeatureFloatValue("chill") / 2;
 
 		if (about == "person")
 		{

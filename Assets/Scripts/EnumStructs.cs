@@ -5,8 +5,10 @@ using UnityEngine;
 public static class Enums  {
     public enum uses		{ food }
     public enum constraints { made_from_human_flesh }
-    public enum actions		{ nothing, move, eat, stress };
-	
+
+    public enum actions { nothing, move, eat, stress };
+    public enum rotations { N, W, S, E };
+
 	public enum gender		{ Male, Female, Nonbinary };
     public enum color		{ red, blue, green, brown, white, black, pink };
 	public enum descriptors { hostile, friendly, helpful, harmful, dangerous, safe, agreeable, disagreeable, loving }    //there will be a LOT of these, keeping it low for now
@@ -17,6 +19,7 @@ public static class Enums  {
 
 	//Checks all related actions to their uses they want; e.g. eat wants food.
 	public static Dictionary<actions,List<uses>> action_to_uses = new Dictionary<actions, List<uses>>() {
+
         {
             actions.eat, new List<uses>(){uses.food}
         }
@@ -36,7 +39,7 @@ public static class Enums  {
 
 public struct memory_person
 {
-    public Person thing;
+    public Person person;
     public Vector2Int pos_at_place;
 }
 
@@ -46,10 +49,16 @@ public struct memory_thing
     public Vector2Int pos_at_place;
 }
 
-public struct Preference
+public struct Preference_Things
 {
     public float like_value;
     public Thing thing;
+}
+
+public struct Preference_People
+{
+    public float like_value;
+    public Person person;
 }
 
 public struct given_action

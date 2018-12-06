@@ -20,6 +20,7 @@ public class LineLibrary
 		return JsonUtility.FromJson<LineLibrary>(jsonString);
 	}
 
+
 	public List<string> getLineString(Enums.lineTypes type)
 	{
 		string line = "";
