@@ -113,7 +113,7 @@ public class LineLibrary
 					rLine.Add(line.Substring(i, 1));
 				}
 			}
-			else if (line[i] == ' ' || line[i] == ',' || line[i] == '\'')
+			else if (line[i] == ' ' || line[i] == ',' || line[i] == '\'' || line[i] == '?')
 			{
 				if (line[newStart] == '.')
 				{

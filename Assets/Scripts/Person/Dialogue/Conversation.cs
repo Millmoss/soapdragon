@@ -163,16 +163,16 @@ public class Conversation
 				}
 				case ".person.feature":
 				{
-					string f = "butt";//from.getMatchingFeature(person, feeling);
+					string f = from.GetMatchingFeature(person, feeling);
 					Noun n = new Noun(f, Enums.generalTypes.feature, person.name);
 					e = n;
 					break;
 				}
 				case ".noun":
 				{
-					if (type == Enums.lineTypes.insultDirected)
+					if (type == Enums.lineTypes.threatDirected)
 					{
-						string near = "rubber duck";//from.getRandomNearbyItem();
+						string near = "rubber duck";//from.GetRandomNearbyItem().name;
 						Noun n = new Noun(near, Enums.generalTypes.thing, "none");
 						e = n;
 					}
@@ -185,7 +185,7 @@ public class Conversation
 				}
 				case ".noun.feature":
 				{
-					string f = "butt";//from.getMatchingFeature(person, feeling);
+					string f = from.GetMatchingFeature(person, feeling);
 					Noun n = new Noun(f, Enums.generalTypes.feature, person.name);
 					e = n;
 					break;
