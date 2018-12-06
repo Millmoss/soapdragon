@@ -42,21 +42,15 @@ static class Pathfinding  {
                 List<Vector2Int> ret = new List<Vector2Int>();
 
                 Vector2Int pos = initPos;
-                ret.Add(pos);
+                
 
-                foreach(Vector2Int x in parents.Keys)
-                {
-                    Debug.Log(x);
-                }
-                Debug.Log(" ");
-                foreach (Vector2Int x in parents.Values)
-                {
-                    Debug.Log(x);
-                }
-                Debug.Log(" - ");
+     
 
                 foreach (Vector2Int x in closed_list.Keys)
+                {
+                    Debug.Log(x);
                     ret.Add(x);
+                }
 
                 ret.Add(cur_pos);
 

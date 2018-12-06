@@ -41,6 +41,7 @@ public class Person {
 	private Thing wanted_object;
 	private Vector2Int moveto_position;
 	private given_action current_action;
+    private List<Vector2Int> path_to_obj;
 
     private static Thing null_object = new Thing("NOTHING", Vector2Int.zero, 0, 0, 0, 0, 0, null, null, null);
 
@@ -220,6 +221,8 @@ public class Person {
                         found = true;
                         wanted_object = item.thing;
                         moveto_position = item.pos_at_place;
+                        path_to_obj = Pathfinding.GetPath(position, moveto_position,
+                            new List<Vector2Int>(), new Vector2Int(999, 999));
                         break;
                     }
                 }
@@ -274,7 +277,8 @@ public class Person {
         }
 
         //Move towards item; use actual pathfinding at some point.
-        position.y++;
+        position = path_to_obj[0];
+        path_to_obj.RemoveAt(0);
 
 
         return name + " is moving towards the " + wanted_object.name + " at position " + moveto_position +
