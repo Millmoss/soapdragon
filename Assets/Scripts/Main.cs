@@ -12,10 +12,10 @@ public class Main : MonoBehaviour {
     
     private void Start()
     {
-        Dictionary<KeyValuePair<string,string>, float> trait_likes = new Dictionary<KeyValuePair<string,string>, float>()
+        Dictionary<string, float> trait_likes = new Dictionary<string, float>()
         {
-            {new KeyValuePair<string, string>("gender","Male"), 0.86f},
-            {new KeyValuePair<string, string>("hair","red"), 0.86f}
+            {"gender.male", 0.86f},
+            {"hair.red", 0.86f}
         };
 
         List<Person> ppl= new List<Person>();

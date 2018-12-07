@@ -1,14 +1,67 @@
 {
+	"comment0"	: "initialization info",
+	
+	"xPosition"	: 1,
+	"yPosition" : 1,
+	"rotation"	: 1,
+	
 	"name" 		: "Boy Pool",
-	"physical" 	:
+	
+	"comment1"	: "physical",
+	
+	"eyesight"	: 5,
+	"muscle"	: 0.5,
+	"fat"		: 0.3,
+	"height"	: 5.9,
+	"weight"	: 207.0,
+	"beauty"	: 0.9,
+	
+	"comment2"		: "mental",
+	
+	"wit"			: 0.1,
+	"chill"			: 0.7,
+	"introversion"	: 0.0,
+	
+	"comment3"	: "emotion",
+	
+	"happiness"	: 0.3,
+	"sadness"	: 0.0,
+	"anger"		: 0.0,
+	"fear"		: 0.0,
+	"disgust"	: 0.0,
+	
+	"comment4"	: "motivators",
+	
+	"hunger"	: 0.1,
+	"thirst"	: 0.15,
+	"tiredness"	: 0.3,
+	"social"	: 0.5,
+	"stress"	: 0.1,
+	"libido"	: 0.2,
+	
+	"features"	:
 	[
-		"gender" 	: "male"
-		"hair"		: "blue"
-		"eyes"		: "brown"
-		"muscle"	: 0.5
-		"fat"		: 0.3
-		"height"	: 5.9
-		"weight"	: 207
-		"beauty"	: 0.9
-	]
+		"gender%male",
+		"hair%blue",
+		"eyes%brown",
+		"voice%smooth",
+		"voice%soft",
+		"skin%tan"
+	],
+	
+	"preferencesString"	:
+	[
+		"person%Jane:0.3",
+		"person%gender%male:1.0",
+		"person%hair%blue:0.9",
+		"person%hair%red:0.5",
+		"person%physical%muscle:0.1",
+		"person%mental%wit:-0.6",
+		"person%eyes%brown:-0.2",
+		"person%eyes%red:0.1",
+		"person%gender%female:0.5",
+		"person%gender%nonbinary:0.7"
+	],
+	
+	"comment5"	: "add memory later"
 }
