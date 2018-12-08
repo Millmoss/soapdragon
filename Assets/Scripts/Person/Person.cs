@@ -57,7 +57,7 @@ public class Person {
 
 	//general preference of a person, place, thing, feature, etc
 	//examples: "person%name", "person%feature%type", "thing%feature%type", "place%name"
-	private Dictionary<string, float> likes;
+	private Dictionary<string, float> preferences;
 	private char[] splitPercent;
 	private char[] splitColon;
 
@@ -107,7 +107,7 @@ public class Person {
 
 		features_float = new Dictionary<string, float>();
 		features_string = new Dictionary<string, string>();
-		likes = new Dictionary<string, float>();
+		preferences = new Dictionary<string, float>();
 
 		splitPercent = new char[1];
 		splitPercent[0] = '%';
@@ -133,6 +133,18 @@ public class Person {
 		features_float["social"] = pd.social;
 		features_float["stress"] = pd.stress;
 		features_float["libido"] = pd.libido;
+
+		for (int i = 0; i < pd.features.Length; i++)
+		{
+			string[] f = pd.features[i].Split(splitPercent);
+			features_string[f[0]] = f[1];
+		}
+
+		for (int i = 0; i < pd.preferences.Length; i++)
+		{
+			string[] f = pd.preferences[i].Split(splitColon);
+			preferences[f[0]] = float.Parse(f[1]);
+		}
 	}
 
 	public void setChill(float c)

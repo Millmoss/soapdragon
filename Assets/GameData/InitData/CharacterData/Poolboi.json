@@ -49,7 +49,7 @@
 		"skin%tan"
 	],
 	
-	"preferencesString"	:
+	"preferences":
 	[
 		"person%Jane:0.3",
 		"person%gender%male:1.0",

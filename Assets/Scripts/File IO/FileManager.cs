@@ -54,6 +54,7 @@ public static class FileManager
 			PersonData pd = PersonData.CreateFromJSON(data);
 
 			Person p = new Person(pd);
+			people.Add(p);
 		}
 
 		return people;

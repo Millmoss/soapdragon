@@ -101,7 +101,9 @@ public class NotMain : MonoBehaviour
 		Line l7 = c.speak(bananaMan, billiam, l6, l6.aggregateLine(), -1);
 		print("The Banana Man to Billiam: " + l7.getLineString());*/
 
-		FileManager.initPersons();
+		List<Person> lp = FileManager.initPersons();
+		print(lp[0].GetFeatureFloatValue("weight"));
+		print(lp[0].GetFeatureStringValue("hair"));
 	}
 	
 	void Update ()
