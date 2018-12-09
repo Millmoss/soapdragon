@@ -67,7 +67,8 @@ public class Person {
 
 
     public Person(string _name, Enums.gender _gender, Vector2Int _pos, Place _current_room, 
-        Dictionary<KeyValuePair<string, string>, float> _likes_traits)
+        Dictionary<KeyValuePair<string, string>, float> _likes_traits,
+		Dictionary<string, string> feat_str)
     {
         name = _name;
         eyesight = 5;
@@ -83,9 +84,15 @@ public class Person {
 
         wanted_object = null;
         likes_traits = _likes_traits;
+		features_string = feat_str;
     }
+    
+	public void setChill(float c)
+	{
+		features_float["chill"] = c;
+	}
 
-    //Returns true if a person's feature has the given value.
+    //Returns true if the person has the given trait.
     public bool HasFeature(string feature, string value)
     {
         if(features_string.ContainsKey(feature))
