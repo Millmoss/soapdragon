@@ -36,7 +36,6 @@ public class Thing	//I wanted to call it object but obviously that's not a good 
     public void Damage()
     {
         durability--;
-        Debug.Log(durability);
     }
 
 	public bool hasUse(Enums.uses use)

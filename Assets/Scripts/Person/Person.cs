@@ -14,6 +14,8 @@ public class Person {
     private Enums.rotations rotation;
 	public Memory memory { get; private set; }
 	public Place current_place { get; private set; }
+    public Conversation c;
+    public bool in_conversation { get; private set; }
 
     Dictionary<string, float> needs = new Dictionary<string, float>()
     {
@@ -43,7 +45,7 @@ public class Person {
 
     Dictionary<string, string> features_string = new Dictionary<string, string>()
     {
-        {"gender","Male" },
+        {"gender","male" },
         {"hair", "red" },
         {"eyes", "blue" }
     };
@@ -53,11 +55,21 @@ public class Person {
 
     //Pair values are Type -> Value -> how much is liked. Prob 2? One fo rstrings and one for floats 
     //Unless we can think of something not dumb.
-    //EX: KeyValuePair<"gender","Male">, 0.1
-    private Dictionary<KeyValuePair<string, string>, float> likes_traits;
+    //EX: KeyValuePair<"gender","male">, 0.1
+    private Dictionary<string, float> likes_traits;
 
-    //These are for pathfinding / AI interaction stuff.
-    private Thing wanted_object;
+	//general preference of a person, place, thing, feature, etc
+	//examples: "person%name", "person%feature%type", "thing%feature%type", "place%name"
+    //Note: I disagree with using this for all preference, mainly for ease of use / runtime. It is a far larger hassle to have to 
+    //go through all preferred things to get a specific subset if:
+    //1) We already know how these subsets can be split up into catagories for future searches
+    //2) It doesn't save much memory (you still need to store all the values in the end).
+	private Dictionary<string, float> preferences;
+	private char[] splitPercent;
+	private char[] splitColon;
+
+	//These are for pathfinding / AI interaction stuff.
+	private Thing wanted_object;
 	private Vector2Int moveto_position;
 	private given_action current_action;
     private List<Vector2Int> path_to_obj;
@@ -67,7 +79,7 @@ public class Person {
 
 
     public Person(string _name, Enums.gender _gender, Vector2Int _pos, Place _current_room, 
-        Dictionary<KeyValuePair<string, string>, float> _likes_traits,
+        Dictionary<string, float> _likes_traits,
 		Dictionary<string, string> feat_str)
     {
         name = _name;
@@ -85,6 +97,64 @@ public class Person {
         wanted_object = null;
         likes_traits = _likes_traits;
 		features_string = feat_str;
+
+
+		splitPercent = new char[1];
+		splitPercent[0] = '%';
+		splitColon = new char[1];
+		splitColon[0] = ':';
+	}
+
+	public Person(PersonData pd, Place _current_room)
+	{
+		position = new Vector2Int(pd.xPosition, pd.yPosition);
+		rotation = (Enums.rotations)pd.rotation;
+		name = pd.name;
+
+		eyesight = pd.eyesight;
+
+		features_float = new Dictionary<string, float>();
+		features_string = new Dictionary<string, string>();
+		preferences = new Dictionary<string, float>();
+
+		splitPercent = new char[1];
+		splitPercent[0] = '%';
+		splitColon = new char[1];
+		splitColon[0] = ':';
+
+		features_float["muscle"] = pd.muscle;
+		features_float["fat"] = pd.fat;
+		features_float["height"] = pd.height;
+		features_float["weight"] = pd.weight;
+		features_float["beauty"] = pd.beauty;
+		features_float["wit"] = pd.wit;
+		features_float["chill"] = pd.chill;
+		features_float["introversion"] = pd.introversion;
+		features_float["happiness"] = pd.happiness;
+		features_float["sadness"] = pd.sadness;
+		features_float["anger"] = pd.anger;
+		features_float["fear"] = pd.fear;
+		features_float["disgust"] = pd.disgust;
+		features_float["hunger"] = pd.hunger;
+		features_float["thirst"] = pd.thirst;
+		features_float["tiredness"] = pd.tiredness;
+		features_float["social"] = pd.social;
+		features_float["stress"] = pd.stress;
+		features_float["libido"] = pd.libido;
+
+		for (int i = 0; i < pd.features.Length; i++)
+		{
+			string[] f = pd.features[i].Split(splitPercent);
+			features_string[f[0]] = f[1];
+		}
+
+		for (int i = 0; i < pd.preferences.Length; i++)
+		{
+			string[] f = pd.preferences[i].Split(splitColon);
+			preferences[f[0]] = float.Parse(f[1]);
+        }
+        memory = new Memory();
+        current_place = _current_room;
     }
     
 	public void setChill(float c)
@@ -93,11 +163,12 @@ public class Person {
 	}
 
     //Returns true if the person has the given trait.
-    public bool HasFeature(string feature, string value)
-    {
-        if(features_string.ContainsKey(feature))
+    public bool HasFeature(string feature)
+	{
+		string[] f = feature.Split(splitPercent);
+		if (f[0] == "person" && features_string.ContainsKey(f[1]))
         {
-            if (features_string[feature] == value)
+            if (features_string[f[1]] == f[2])
                 return true;
         }
         return false; 
@@ -121,14 +192,15 @@ public class Person {
     {
         float dif = float.MaxValue;
         string feature = "";
-        foreach(KeyValuePair<string, string> x in likes_traits.Keys)
+        return "eyes";
+		foreach (string x in likes_traits.Keys)
         {
             if(Mathf.Abs(likes_traits[x] - feeling) < dif)
             {
-                if (prsn.HasFeature(x.Key, x.Value))
+                if (prsn.HasFeature(x))
                 { 
                     dif = Mathf.Abs(likes_traits[x] - feeling);
-                    feature = x.Key;
+                    feature = x.Split(splitPercent)[1];
                 }
             }
         }
@@ -146,9 +218,19 @@ public class Person {
         return ret;
     }
 
+    //When this person is spoken to.
+    public void AddLine(Person p, Line l)
+    {
+        memory.AddLine(p, l);
+        memory.AddPerson(current_place.name, p.Position, p);
+        in_conversation = true;
+        //Manipulate preferences based on the given line.
+    }
+
     //Each step this function is called; live "updates"
     public void Update(Dictionary<Vector2Int, List<Person>> ppl, Dictionary<Vector2Int, List<Thing>> thngs)
     {
+        Debug.Log(rotation);
 
         Vector2Int checkPos = new Vector2Int();
         //Check everything in eyesight range.
@@ -183,6 +265,7 @@ public class Person {
                 }
                 if (ppl.ContainsKey(checkPos))
                 {
+                    Debug.Log("WOW!");
                     foreach (Person prsn in ppl[checkPos])
                     {
                         memory.AddPerson(current_place.name, checkPos, prsn);
@@ -244,9 +327,25 @@ public class Person {
         string ret = "";
 
         //He wants to talk.
-        if (needs["social"] > 0.75f)
+        if (needs["social"] > 0.45f || in_conversation)
         {
-            
+            Person x = memory.GetRandomPerson(current_place);
+            if(x == null)
+            {
+                return "There is no one around to talk to.";
+            }
+            Line l;
+            float feeling = 0;
+            string key = "person%" + x.name;
+            if (preferences.ContainsKey(key))
+                feeling = preferences[key];
+            if (memory.GetLine(x) == null)
+                l = c.speak(this, x, x, feeling, -1);
+            else
+                l = c.speak(this, x, memory.GetLine(x), feeling, -1);
+            x.AddLine(this,l);
+            ret += l.getLineString();
+            //c.speak(this,x,)
         }
         return ret;
     }
@@ -265,23 +364,14 @@ public class Person {
             current_action.value = next_action.value;
         }
         //Basic movement algorithm
-        if(wanted_object!=null)
-            Debug.Log(wanted_object.name);
         if (wanted_object == null)
         {
-            Debug.Log("Is null!");
-            Debug.Log(memory.remember_items.Count);
             bool found = false;
-            foreach(string x in memory.remember_items.Keys)
-            {
-                Debug.Log(x);
-            }
             //If we remmeber there is a item @ position, we set that as the item we want to get to to interact with.
             if(memory.remember_items.ContainsKey(current_place.name))
             {
                 foreach (memory_thing item in memory.remember_items[current_place.name])
                 {
-                    Debug.Log(item.thing.name);
                     if (Enums.IsInDictionary(item.thing.uses, current_action.action))
                     {
                         found = true;

@@ -32,7 +32,7 @@ public static class FileManager
 		return el;
 	}
 
-	public static List<Person> initPersons()
+	public static List<Person> initPersons(Place curRoom)
 	{
 		List<Person> people = new List<Person>();
 
@@ -43,13 +43,18 @@ public static class FileManager
 			if (fileNames[fni].Contains(".meta"))
 				continue;
 
-			List<string> data = new List<string>();
+			string data = "";
 
 			System.IO.StreamReader inFile = new System.IO.StreamReader(fileNames[fni]);
 			while (!inFile.EndOfStream)
 			{
-				data.Add(inFile.ReadLine());
+				data += inFile.ReadLine();
 			}
+
+			PersonData pd = PersonData.CreateFromJSON(data);
+
+			Person p = new Person(pd, curRoom);
+			people.Add(p);
 		}
 
 		return people;

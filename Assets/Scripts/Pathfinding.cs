@@ -48,7 +48,6 @@ static class Pathfinding  {
 
                 foreach (Vector2Int x in closed_list.Keys)
                 {
-                    Debug.Log(x);
                     ret.Add(x);
                 }
 

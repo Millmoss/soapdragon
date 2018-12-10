@@ -69,7 +69,9 @@ public class Place
     {
         foreach (List<Person> x in people.Values)
             foreach (Person y in x)
+            {
                 y.Update(people, things);
+            }
     }
 
     //Activates every person within this room, and returns a string that
@@ -80,7 +82,11 @@ public class Place
         string ret = "";
         foreach (List<Person> x in people.Values)
             foreach (Person y in x)
+            { 
                 ret += y.Action();
+                ret += "\n";
+            }
+        ret = ret.Substring(0, ret.Length - 1);
         return ret;
     }
 

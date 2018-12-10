@@ -6,24 +6,20 @@ public class Main : MonoBehaviour {
 
     public PrintText txt;
     public Vector2Int boundries;
-
+    Conversation c;
 
     Place cur_room = new Place(new Rectangle(new Vector2Int(0, 0), 5, 5, 0),"Home");
-    
+
     private void Start()
     {
-        Dictionary<KeyValuePair<string,string>, float> trait_likes = new Dictionary<KeyValuePair<string,string>, float>()
+        c = new Conversation();
+        List<Person> lp = FileManager.initPersons(cur_room);
+        foreach(Person p in lp)
         {
-            {new KeyValuePair<string, string>("gender","Male"), 0.86f},
-            {new KeyValuePair<string, string>("hair","red"), 0.86f}
-        };
+            p.c = c;
+            cur_room.AddPeople(p.Position, new List<Person>() { p });
+        }
 
-        List<Person> ppl= new List<Person>();
-        ppl.Add(new Person("Bill", Enums.gender.Male, new Vector2Int(0, 0), cur_room, trait_likes,null));
-
-        cur_room.AddPeople(new Vector2Int(0,0), ppl);
-
-        //This should be instantiated via a file parser, so we don't have to do all this by had soon thank god.
         List<Thing> thngs = new List<Thing>();
         thngs.Add(new Thing("Ice Cream", new Vector2Int(0, 5), 200, 2, 0, 2f, 3,
             new HashSet<Enums.uses>() { Enums.uses.food }, new HashSet<Enums.constraints>() { Enums.constraints.made_from_human_flesh },
@@ -31,20 +27,20 @@ public class Main : MonoBehaviour {
             ));
 
         List<Thing> bing = new List<Thing>();
-        bing.Add(new Thing("Vice Meme", new Vector2Int(0, -5), 200, 2, 0, 2f, 3,
+        bing.Add(new Thing("Cheesecake", new Vector2Int(0, -5), 200, 2, 0, 2f, 3,
             new HashSet<Enums.uses>() { Enums.uses.food }, new HashSet<Enums.constraints>() { Enums.constraints.made_from_human_flesh },
             new HashSet<string>() { "bold", "brash", "belongs", "trash" }
             ));
 
         List<Thing> ying = new List<Thing>();
-        ying.Add(new Thing("West is left", new Vector2Int(0, -5), 200, 2, 0, 2f, 3,
+        ying.Add(new Thing("Apple", new Vector2Int(0, -5), 200, 2, 0, 2f, 3,
             new HashSet<Enums.uses>() { Enums.uses.food }, new HashSet<Enums.constraints>() { Enums.constraints.made_from_human_flesh },
             new HashSet<string>() { "bold", "brash", "belongs", "trash" }
             ));
 
 
         List<Thing> ding = new List<Thing>();
-        ding.Add(new Thing("East is soggy", new Vector2Int(0, -5), 200, 2, 0, 2f, 3,
+        ding.Add(new Thing("Fruitcake", new Vector2Int(0, -5), 200, 2, 0, 2f, 3,
             new HashSet<Enums.uses>() { Enums.uses.food }, new HashSet<Enums.constraints>() { Enums.constraints.made_from_human_flesh },
             new HashSet<string>() { "bold", "brash", "belongs", "trash" }
             ));
@@ -54,9 +50,10 @@ public class Main : MonoBehaviour {
         cur_room.AddThings(new Vector2Int(-5, 0), ying);
         cur_room.AddThings(new Vector2Int(5, 0), ding);
 
+        c = new Conversation();
     }
-
-
+    
+    
     private void Update()
     {
         if(Input.GetKeyDown(KeyCode.Space))

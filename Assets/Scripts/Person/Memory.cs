@@ -17,12 +17,29 @@ public class Memory {
     //What we remember about people. memory_person.
     public Dictionary<string, List<memory_person>> remember_people;
 
+    //Last thing we remember a person saying to us.
+    public Dictionary<Person, Line> said_to;
+
     public Memory()
     {
         locations_assoc = new Dictionary<Place, List<Enums.actions>>();
         items_assoc = new Dictionary<string, List<Enums.actions>>();
         remember_items = new Dictionary<string, List<memory_thing>>();
         remember_people = new Dictionary<string, List<memory_person>>();
+        said_to = new Dictionary<Person, Line>();
+    }
+
+    public void AddLine(Person p, Line l)
+    {
+        said_to[p] = l;
+    }
+
+    //Given a person, returns the last line they said to them. Returns null if there is no memory.
+    public Line GetLine(Person p)
+    {
+        if(said_to.ContainsKey(p))
+            return said_to[p];
+        return null;
     }
 
     public List<Thing> GetThings(string place_name)
@@ -38,8 +55,18 @@ public class Memory {
         return t;
     }
 
-        //Add a person to the memory of people. 
-        public void AddPerson(string place_name, Vector2Int pos, Person obj)
+    public Person GetRandomPerson(Place rm)
+    {
+        if (remember_people.ContainsKey(rm.name) == false)
+            return null;
+        if (remember_people[rm.name].Count <= 0)
+            return null;
+        int rand = Random.Range(0, remember_people[rm.name].Count);
+        return remember_people[rm.name][rand].person;
+    }
+
+    //Add a person to the memory of people. 
+    public void AddPerson(string place_name, Vector2Int pos, Person obj)
     {
         memory_person tmp = new memory_person();
         tmp.pos_at_place = pos;

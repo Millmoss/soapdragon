@@ -9,7 +9,7 @@ public static class Enums  {
     public enum actions { nothing, move, eat, stress };
     public enum rotations { N, W, S, E };
 
-	public enum gender		{ Male, Female, Nonbinary };
+	public enum gender		{ male, female, nonbinary };
     public enum color		{ red, blue, green, brown, white, black, pink };
 	public enum descriptors { hostile, friendly, helpful, harmful, dangerous, safe, agreeable, disagreeable, loving }    //there will be a LOT of these, keeping it low for now
 

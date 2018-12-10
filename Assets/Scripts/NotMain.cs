@@ -25,7 +25,7 @@ public class NotMain : MonoBehaviour
 		print(l4.getLineString());
 		*/
 
-		Place r = new Place(new Rectangle(new Vector2Int(0, 0), 3, 3, 0), "Kitchen");
+		/*Place r = new Place(new Rectangle(new Vector2Int(0, 0), 3, 3, 0), "Kitchen");
 
 
 		List<Thing> lt = new List<Thing>();
@@ -45,7 +45,7 @@ public class NotMain : MonoBehaviour
 		bilikes.Add(new KeyValuePair<string, string>("hair", "banana"), -1f);
 		bilikes.Add(new KeyValuePair<string, string>("eyes", "banana"), -1f);
 
-		Person billiam = new Person("Billiam", Enums.gender.Male, new Vector2Int(0, 0), r, bilikes, bifeat);
+		Person billiam = new Person("Billiam", Enums.gender.male, new Vector2Int(0, 0), r, bilikes, bifeat);
 		billiam.setChill(.1f);
 
 		Dictionary<string, string> jafeat = new Dictionary<string, string>();
@@ -61,7 +61,7 @@ public class NotMain : MonoBehaviour
 		jalikes.Add(new KeyValuePair<string, string>("hair", "banana"), -.3f);
 		jalikes.Add(new KeyValuePair<string, string>("eyes", "red"), -.3f);
 
-		Person janine = new Person("Janine", Enums.gender.Female, new Vector2Int(0, 0), r, jalikes, jafeat);
+		Person janine = new Person("Janine", Enums.gender.female, new Vector2Int(0, 0), r, jalikes, jafeat);
 		janine.setChill(.9f);
 
 		Dictionary<string, string> bafeat = new Dictionary<string, string>();
@@ -77,7 +77,7 @@ public class NotMain : MonoBehaviour
 		balikes.Add(new KeyValuePair<string, string>("personality", "nice"), 1f);
 		balikes.Add(new KeyValuePair<string, string>("eyes", "black"), -1f);
 
-		Person bananaMan = new Person("The Banana Man", Enums.gender.Nonbinary, new Vector2Int(0, 0), r, balikes, bafeat);
+		Person bananaMan = new Person("The Banana Man", Enums.gender.nonbinary, new Vector2Int(0, 0), r, balikes, bafeat);
 		bananaMan.setChill(.5f);
 
 		List<Person> lp = new List<Person>();
@@ -100,7 +100,11 @@ public class NotMain : MonoBehaviour
 		Line l6 = c.speak(billiam, bananaMan, bananaMan, Mathf.Clamp(-.9f + l5.aggregateLine(), -1, 1), -1);
 		print("Billiam to The Banana Man: " + l6.getLineString());
 		Line l7 = c.speak(bananaMan, billiam, l6, l6.aggregateLine(), -1);
-		print("The Banana Man to Billiam: " + l7.getLineString());
+		print("The Banana Man to Billiam: " + l7.getLineString());*/
+
+		List<Person> lp = FileManager.initPersons(null);
+		print(lp[0].GetFeatureFloatValue("weight"));
+		print(lp[0].GetFeatureStringValue("hair"));
 	}
 	
 	void Update ()
