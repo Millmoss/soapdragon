@@ -5,21 +5,21 @@
 	"yPosition" : 3,
 	"rotation"	: 2,
 	
-	"name" 		: "Boy Big",
+	"name" 		: "Jane",
 	
 	"comment1"	: "physical",
 	
 	"eyesight"	: 7,
-	"muscle"	: 0.1,
-	"fat"		: 0.9,
-	"height"	: 2.3,
-	"weight"	: 530.0,
+	"muscle"	: 0.2,
+	"fat"		: 0.2,
+	"height"	: 5.3,
+	"weight"	: 150.0,
 	"beauty"	: 0.2,
 	
 	"comment2"		: "mental",
 	
 	"wit"			: 0.3,
-	"chill"			: 0.0,
+	"chill"			: 0.2,
 	"introversion"	: 0.97,
 	
 	"comment3"	: "emotion",
@@ -41,7 +41,7 @@
 	
 	"features"	:
 	[
-		"gender%male",
+		"gender%female",
 		"hair%orange",
 		"eyes%purple",
 		"voice%rough",
@@ -50,15 +50,16 @@
 	
 	"preferences":
 	[
+		"person%Boy Pool:-0.2",
 		"person%gender%male:-1.0",
-		"person%hair%blue:0.2",
+		"person%hair%blue:-0.2",
 		"person%hair%red:0.4",
 		"person%physical%muscle:1.0",
 		"person%mental%wit:-1.0",
 		"person%eyes%brown:-1.0",
 		"person%eyes%red:1.0",
-		"person%gender%female:1.0",
-		"person%gender%nonbinary:-1.0"
+		"person%gender%female:0.8",
+		"person%gender%nonbinary:-0.2"
 	],
 	
 	"comment5"	: "add memory later"

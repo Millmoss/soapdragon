@@ -339,10 +339,30 @@ public class Person {
             string key = "person%" + x.name;
             if (preferences.ContainsKey(key))
                 feeling = preferences[key];
-            if (memory.GetLine(x) == null)
-                l = c.speak(this, x, x, feeling, -1);
-            else
-                l = c.speak(this, x, memory.GetLine(x), feeling, -1);
+			if (memory.GetLine(x) == null)
+				l = c.speak(this, x, x, feeling, -1);
+			else
+			{
+				float agg = memory.GetLine(x).aggregateLine();
+				if (Mathf.Abs(agg) > .6f)
+				{
+					l = c.speak(this, x, memory.GetLine(x), feeling + agg, -1);
+				}
+				else
+				{
+					l = c.speak(this, x, x, feeling, -1);
+					float r = UnityEngine.Random.value;
+					if (r < .5f)
+						foreach (string s in preferences.Keys)
+						{
+							if (UnityEngine.Random.value > .2f)
+							{
+								l = c.speak(this, x, s, preferences[s], -1);
+								break;
+							}
+						}
+				}
+			}
             x.AddLine(this,l);
             ret += l.getLineString();
             //c.speak(this,x,)

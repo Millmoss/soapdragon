@@ -24,7 +24,7 @@ public class Conversation
 
 	public Line speak(Person from, Person to, Person person, float feeling, int lower) //speaks of person
 	{
-		Enums.lineTypes type = determineLine(from, to, person, null, "person", feeling);
+		Enums.lineTypes type = determineLine(from, to, person.name, null, "person", feeling);
 		List<string> lineStrings = ll.getLineString(type);
 
 		Expression[] eList = new Expression[lineStrings.Count];
@@ -33,7 +33,7 @@ public class Conversation
 		{
 			if (lineStrings[i][0] == '.' && lineStrings[i].Length > 1)
 			{
-				Expression e = determineExpression(from, to, person, feeling, lineStrings[i], type, lower);
+				Expression e = determineExpression(from, to, person.name, feeling, lineStrings[i], type, lower);
 				eList[i] = e;
 			}
 			else
@@ -75,7 +75,31 @@ public class Conversation
 		return l;
 	}
 
-	public Enums.lineTypes determineLine(Person from, Person to, Person person, Thing thing, string about, float feeling)
+	public Line speak(Person from, Person to, string thing, float feeling, int lower)    //speaks of line, this is a response
+	{
+		Enums.lineTypes type = determineLine(from, to, null, null, "string", feeling);
+		List<string> lineStrings = ll.getLineString(type);
+
+		Expression[] eList = new Expression[lineStrings.Count];
+
+		for (int i = 0; i < lineStrings.Count; i++)
+		{
+			if (lineStrings[i][0] == '.' && lineStrings[i].Length > 1)
+			{
+				Expression e = determineExpression(from, to, thing, feeling, lineStrings[i], type, lower);
+				eList[i] = e;
+			}
+			else
+			{
+				eList[i] = new Expression(lineStrings[i]);
+			}
+		}
+
+		Line l = new Line(eList, type);
+		return l;
+	}
+
+	public Enums.lineTypes determineLine(Person from, Person to, string person, Thing thing, string about, float feeling)
 	{
 		Enums.lineTypes type = Enums.lineTypes.answerDanger;
 
@@ -84,7 +108,7 @@ public class Conversation
 
 		if (about == "person")
 		{
-			if (to.name.Equals(person.name))
+			if (to.name.Equals(person))
 			{
 				if (feeling < -.8f)
 					type = Enums.lineTypes.threatDirected;
@@ -97,6 +121,10 @@ public class Conversation
 			{
 				type = Enums.lineTypes.opinionUndirected;
 			}
+		}
+		else if (about == "string")
+		{
+			type = Enums.lineTypes.opinionUndirected;
 		}
 		else if (about == "line")
 		{
@@ -111,7 +139,7 @@ public class Conversation
 		return type;
 	}
 
-	public Expression determineExpression(Person from, Person to, Person person, float feeling, string tempExpression, Enums.lineTypes type, int lowerBound)
+	public Expression determineExpression(Person from, Person to, string person, float feeling, string tempExpression, Enums.lineTypes type, int lowerBound)
 	{
 		Expression e = new Expression("BAD");
 
@@ -121,7 +149,7 @@ public class Conversation
 				{
 					string f = el.getExpressionString(Enums.expressionTypes.feelingVerb, feeling, lowerBound);
 					Enums.descriptors d;
-					if (feeling > .7f)
+					if (feeling > .5f)
 						d = Enums.descriptors.loving;
 					else if (feeling > .0f)		//these are not mutually exclusive or anything, fix this later for sure
 						d = Enums.descriptors.friendly;
@@ -131,7 +159,7 @@ public class Conversation
 						d = Enums.descriptors.safe;
 					Enums.descriptors[] desc = new Enums.descriptors[1];
 					desc[0] = d;
-					Noun n = new Noun(person.name, Enums.generalTypes.person, person.name);
+					Noun n = new Noun(person, Enums.generalTypes.person, person);
 					Verb v = new Verb(f, desc, n);
 					e = v;
 					break;
@@ -147,7 +175,7 @@ public class Conversation
 				{
 					string f = el.getExpressionString(Enums.expressionTypes.feelingAdjective, feeling, lowerBound);
 					Enums.descriptors d;
-					if (feeling > .7f)
+					if (feeling > .5f)
 						d = Enums.descriptors.loving;
 					else if (feeling > .0f)     //these are not mutually exclusive or anything, fix this later for sure
 						d = Enums.descriptors.friendly;
@@ -163,8 +191,8 @@ public class Conversation
 				}
 				case ".person.feature":
 				{
-					string f = from.GetMatchingFeature(person, feeling);
-					Noun n = new Noun(f, Enums.generalTypes.feature, person.name);
+					string f = "eyes";//from.GetMatchingFeature(person, feeling);
+					Noun n = new Noun(f, Enums.generalTypes.feature, person);
 					e = n;
 					break;
 				}
@@ -178,15 +206,27 @@ public class Conversation
 					}
 					else
 					{
-						Noun n = new Noun(person.name, Enums.generalTypes.person, person.name);
+						char[] splitPercent = new char[1];
+						splitPercent[0] = '%';
+						string f = person.Split(splitPercent)[1];
+						Noun n = new Noun(f, Enums.generalTypes.person, f);
 						e = n;
 					}
 					break;
 				}
 				case ".noun.feature":
 				{
-					string f = from.GetMatchingFeature(person, feeling);
-					Noun n = new Noun(f, Enums.generalTypes.feature, person.name);
+					char[] splitPercent = new char[1];
+					splitPercent[0] = '%';
+					Noun n;
+					if (person.Split(splitPercent).Length < 3)
+					{
+						n = new Noun("eyes", Enums.generalTypes.feature, person.Split(splitPercent)[1]);
+						e = n;
+						break;
+					}
+					string f = person.Split(splitPercent)[2];
+					n = new Noun(f, Enums.generalTypes.feature, person.Split(splitPercent)[0]);
 					e = n;
 					break;
 				}
@@ -194,6 +234,7 @@ public class Conversation
 				{
 					Noun n = new Noun("line", Enums.generalTypes.line, to.name);
 					Enums.descriptors d;
+					Main.print(feeling + ", ");
 					if (feeling > .33f)
 						d = Enums.descriptors.agreeable;
 					else if (feeling < -.33f)
