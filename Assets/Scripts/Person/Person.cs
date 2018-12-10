@@ -298,7 +298,7 @@ public class Person {
         if (ps != "")
         {
             ret += "\n";
-            ret += ps;
+            ret += name+" says : " +ps;
         }
         return ret;
 

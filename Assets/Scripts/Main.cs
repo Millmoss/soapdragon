@@ -21,26 +21,26 @@ public class Main : MonoBehaviour {
         }
 
         List<Thing> thngs = new List<Thing>();
-        thngs.Add(new Thing("Ice Cream", new Vector2Int(0, 5), 200, 2, 0, 2f, 3,
+        thngs.Add(new Thing("Ice Cream", new Vector2Int(0, 5), 200, 2, 1, 2f, 3,
             new HashSet<Enums.uses>() { Enums.uses.food }, new HashSet<Enums.constraints>() { Enums.constraints.made_from_human_flesh },
             new HashSet<string>() { "bold", "brash", "belongs", "trash" }
             ));
 
         List<Thing> bing = new List<Thing>();
-        bing.Add(new Thing("Cheesecake", new Vector2Int(0, -5), 200, 2, 0, 2f, 3,
+        bing.Add(new Thing("Cheesecake", new Vector2Int(0, -5), 200, 2, 1, 2f, 3,
             new HashSet<Enums.uses>() { Enums.uses.food }, new HashSet<Enums.constraints>() { Enums.constraints.made_from_human_flesh },
             new HashSet<string>() { "bold", "brash", "belongs", "trash" }
             ));
 
         List<Thing> ying = new List<Thing>();
-        ying.Add(new Thing("Apple", new Vector2Int(0, -5), 200, 2, 0, 2f, 3,
+        ying.Add(new Thing("Apple", new Vector2Int(0, -5), 200, 2, 1, 2f, 3,
             new HashSet<Enums.uses>() { Enums.uses.food }, new HashSet<Enums.constraints>() { Enums.constraints.made_from_human_flesh },
             new HashSet<string>() { "bold", "brash", "belongs", "trash" }
             ));
 
 
         List<Thing> ding = new List<Thing>();
-        ding.Add(new Thing("Fruitcake", new Vector2Int(0, -5), 200, 2, 0, 2f, 3,
+        ding.Add(new Thing("Fruitcake", new Vector2Int(0, -5), 200, 2, 1, 2f, 3,
             new HashSet<Enums.uses>() { Enums.uses.food }, new HashSet<Enums.constraints>() { Enums.constraints.made_from_human_flesh },
             new HashSet<string>() { "bold", "brash", "belongs", "trash" }
             ));
