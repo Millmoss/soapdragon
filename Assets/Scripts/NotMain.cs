@@ -5,11 +5,11 @@ using UnityEngine;
 public class NotMain : MonoBehaviour
 {
 	//this is not main! use this for testing garbage, never actually use
-	Conversation c;
+	Conversation conv;
 
 	void Start ()
 	{
-		c = new Conversation();
+		conv = new Conversation();
 
 		/*
 		Person p1 = new Person("waldo", Enums.gender.Male, new Vector2Int(0, 0), null);
@@ -102,9 +102,16 @@ public class NotMain : MonoBehaviour
 		Line l7 = c.speak(bananaMan, billiam, l6, l6.aggregateLine(), -1);
 		print("The Banana Man to Billiam: " + l7.getLineString());*/
 
-		List<Person> lp = FileManager.initPersons(null);
-		print(lp[0].GetFeatureFloatValue("weight"));
-		print(lp[0].GetFeatureStringValue("hair"));
+		//List<Person> lp = FileManager.initPersons(null);
+		//print(lp[0].GetFeatureFloatValue("weight"));
+		//print(lp[0].GetFeatureStringValue("hair"));
+
+		Place r = new Place(new Rectangle(new Vector2Int(0, 0), 3, 3, 0), "Kitchen");
+
+		Person a = FileManager.initPersons(r)[0];
+		Thing b = new Thing(null, new Vector2Int(0, 0), 0, 0, 0, 0, 0, null, null, null);
+		conv.speak(a, a, a, 0, -1);
+		conv.speak(a, a, b, 0, -1);
 	}
 	
 	void Update ()

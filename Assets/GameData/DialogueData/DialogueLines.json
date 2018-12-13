@@ -1,21 +1,21 @@
 {
 	"opinionDirected" :
 	[
-		"I .feelingVerb you.",
-		"I .feelingVerb your .person.feature.",
-		"I .amountAdverb .feelingVerb your .person.feature.",
-		"Your .person.feature is .amountAdverb .feelingAdjective.",
-		"You are .amountAdverb .feelingAdjective."
+		"I [%feelingVerb%] you.",
+		"I [%feelingVerb%] your [%person%feature%].",
+		"I [%amountAdverb%] [%feelingVerb%] your [%person%feature%].",
+		"Your [%person%feature%] is [%amountAdverb%] [%feelingAdjective%].",
+		"You are [%amountAdverb%] [%feelingAdjective%]."
 	],
 	
 	"opinionUndirected" :
 	[
-		"I .feelingVerb .noun.",
-		"I .feelingVerb .noun.feature.",
-		"I .feelingVerb .noun's .noun.feature.",
-		"I .amountAdverb .feelingVerb .noun.",
-		"I .amountAdverb .feelingVerb .noun.feature.",
-		"I .amountAdverb .feelingVerb .noun's .noun.feature."
+		"I [%feelingVerb%] [%noun%].",
+		"I [%feelingVerb%] [%noun%feature%].",
+		"I [%feelingVerb%] [%noun%]'s [%noun%feature%].",
+		"I [%amountAdverb%] [%feelingVerb%] [%noun%].",
+		"I [%amountAdverb%] [%feelingVerb%] [%noun%feature%].",
+		"I [%amountAdverb%] [%feelingVerb%] [%noun%]'s [%noun%feature%]."
 	],
 	
 	"requestDirected" :
@@ -37,7 +37,7 @@
 	[
 		"I oughtta kill you.",
 		"I'm going to dab on your grave.",
-		"You see this .noun? It's gonna be the last thing you see.",
+		"You see this [%noun%]? It's gonna be the last thing you see.",
 		"I'm gonna murder your goddamn two-timing bitch of a grandmama. Then I'm gonna murder you.",
 		"I know where you live.",
 		"I know where you're grandmama lives."
@@ -45,8 +45,8 @@
 	
 	"opinionOpinionSimple" :
 	[
-		"I .agreementVerb.",
-		"I .amountAdverb .agreementVerb."
+		"I [%agreementVerb%].",
+		"I [%amountAdverb%] [%agreementVerb%]."
 	],
 	
 	"questionReason" :
