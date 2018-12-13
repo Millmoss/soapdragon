@@ -59,12 +59,12 @@ public class Person {
     private Dictionary<string, float> likes_traits;
 
 	//general preference of a person, place, thing, feature, etc
-	//examples: "person%name", "person%feature%type", "thing%feature%type", "place%name"
+	//examples: "person -> name/value", "person%feature -> type/value", "thing%feature -> type/value", "place -> name/value", "place%feature -> type/value"
     //Note: I disagree with using this for all preference, mainly for ease of use / runtime. It is a far larger hassle to have to 
     //go through all preferred things to get a specific subset if:
     //1) We already know how these subsets can be split up into catagories for future searches
     //2) It doesn't save much memory (you still need to store all the values in the end).
-	private Dictionary<string, float> preferences;
+	private Dictionary<string, Dictionary<string, float>> preferences;
 	private char[] splitPercent;
 	private char[] splitColon;
 
@@ -115,7 +115,7 @@ public class Person {
 
 		features_float = new Dictionary<string, float>();
 		features_string = new Dictionary<string, string>();
-		preferences = new Dictionary<string, float>();
+		preferences = new Dictionary<string, Dictionary<string, float>>();
 
 		splitPercent = new char[1];
 		splitPercent[0] = '%';
@@ -151,7 +151,19 @@ public class Person {
 		for (int i = 0; i < pd.preferences.Length; i++)
 		{
 			string[] f = pd.preferences[i].Split(splitColon);
-			preferences[f[0]] = float.Parse(f[1]);
+			string[] s = f[0].Split(splitPercent);
+			if (s.Length == 2)
+			{
+				if (!preferences.ContainsKey(s[0]))
+					preferences.Add(s[0], new Dictionary<string, float>());
+				preferences[s[0]].Add(s[1], float.Parse(f[1]));
+			}
+			else if (s.Length == 3)
+			{
+				if (!preferences.ContainsKey(s[0] + "%" + s[1]))
+					preferences.Add(s[0] + "%" + s[1], new Dictionary<string, float>());
+				preferences[s[0] + "%" + s[1]].Add(s[2], float.Parse(f[1]));
+			}
         }
         memory = new Memory();
         current_place = _current_room;
@@ -336,9 +348,8 @@ public class Person {
             }
             Line l;
             float feeling = 0;
-            string key = "person%" + x.name;
-            if (preferences.ContainsKey(key))
-                feeling = preferences[key];
+            if (preferences.ContainsKey("person"))
+                feeling = preferences["person"][x.name];
 			if (memory.GetLine(x) == null)
 				l = c.speak(this, x, x, feeling, -1);
 			else
@@ -352,12 +363,12 @@ public class Person {
 				{
 					l = c.speak(this, x, x, feeling, -1);
 					float r = UnityEngine.Random.value;
-					if (r < .5f)
-						foreach (string s in preferences.Keys)
+					if (r < .5f && preferences.ContainsKey("person%hair"))
+						foreach (string s in preferences["person%hair"].Keys)
 						{
 							if (UnityEngine.Random.value > .2f)
 							{
-								l = c.speak(this, x, s, preferences[s], -1);
+								l = c.speak(this, x, s, preferences["person%hair"][s], -1);
 								break;
 							}
 						}

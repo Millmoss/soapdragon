@@ -212,10 +212,7 @@ public class Conversation
 					}
 					else
 					{
-						char[] splitPercent = new char[1];
-						splitPercent[0] = '%';
-						string f = person.Split(splitPercent)[1];
-						Noun n = new Noun(f, Enums.generalTypes.person, f);
+						Noun n = new Noun(person, Enums.generalTypes.person, person);
 						e = n;
 					}
 					break;
@@ -227,7 +224,7 @@ public class Conversation
 					Noun n;
 					if (person.Split(splitPercent).Length < 3)
 					{
-						n = new Noun("eyes", Enums.generalTypes.feature, person.Split(splitPercent)[1]);
+						n = new Noun("eyes", Enums.generalTypes.feature, person);
 						e = n;
 						break;
 					}
