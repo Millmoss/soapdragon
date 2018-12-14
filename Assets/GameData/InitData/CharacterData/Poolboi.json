@@ -51,12 +51,12 @@
 	
 	"preferences":
 	[
-		"person%Jane:0.3",
+		"person%Jane%attitude:0.3",
 		"person%gender%male:1.0",
 		"person%hair%blue:0.9",
 		"person%hair%red:0.5",
-		"person%physical%muscle:0.1",
-		"person%mental%wit:-0.6",
+		"person%muscle%0.6:0.1",
+		"person%wit%0.2:0.8",
 		"person%eyes%brown:-0.2",
 		"person%eyes%red:0.1",
 		"person%gender%female:0.5",

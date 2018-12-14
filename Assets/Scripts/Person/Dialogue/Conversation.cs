@@ -197,7 +197,7 @@ public class Conversation
 				}
 				case "%person%feature":
 				{
-					string f = "eyes";//from.GetMatchingFeature(person, feeling);
+					string f = from.GetMatchingFeature(to, feeling);
 					Noun n = new Noun(f, Enums.generalTypes.feature, person);
 					e = n;
 					break;
