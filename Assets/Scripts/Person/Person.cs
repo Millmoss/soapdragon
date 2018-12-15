@@ -59,12 +59,8 @@ public class Person {
     private Dictionary<string, float> likes_traits;
 
 	//general preference of a person, place, thing, feature, etc
-	//examples: "person%name", "person%feature%type", "thing%feature%type", "place%name"
-    //Note: I disagree with using this for all preference, mainly for ease of use / runtime. It is a far larger hassle to have to 
-    //go through all preferred things to get a specific subset if:
-    //1) We already know how these subsets can be split up into catagories for future searches
-    //2) It doesn't save much memory (you still need to store all the values in the end).
-	private Dictionary<string, float> preferences;
+	//get and set using structure of "person, name, feature", "person, hair, blue", "thing, apple, flavor%sweet"
+	private Preferences preferences;
 	private char[] splitPercent;
 	private char[] splitColon;
 
@@ -115,7 +111,6 @@ public class Person {
 
 		features_float = new Dictionary<string, float>();
 		features_string = new Dictionary<string, string>();
-		preferences = new Dictionary<string, float>();
 
 		splitPercent = new char[1];
 		splitPercent[0] = '%';
@@ -148,15 +143,21 @@ public class Person {
 			features_string[f[0]] = f[1];
 		}
 
-		for (int i = 0; i < pd.preferences.Length; i++)
-		{
-			string[] f = pd.preferences[i].Split(splitColon);
-			preferences[f[0]] = float.Parse(f[1]);
-        }
+		preferences = new Preferences(pd.preferences);
         memory = new Memory();
         current_place = _current_room;
-    }
-    
+	}
+
+	public Dictionary<string, string> GetFeaturesString()
+	{
+		return new Dictionary<string, string>(features_string);
+	}
+
+	public Dictionary<string, float> GetFeaturesFloat()
+	{
+		return new Dictionary<string, float>(features_float);
+	}
+
 	public void setChill(float c)
 	{
 		features_float["chill"] = c;
@@ -192,18 +193,8 @@ public class Person {
     {
         float dif = float.MaxValue;
         string feature = "";
-        return "eyes";
-		foreach (string x in likes_traits.Keys)
-        {
-            if(Mathf.Abs(likes_traits[x] - feeling) < dif)
-            {
-                if (prsn.HasFeature(x))
-                { 
-                    dif = Mathf.Abs(likes_traits[x] - feeling);
-                    feature = x.Split(splitPercent)[1];
-                }
-            }
-        }
+
+		feature = preferences.getClosestMatching(prsn, feeling);
 
         return feature;
     }
@@ -336,31 +327,19 @@ public class Person {
             }
             Line l;
             float feeling = 0;
-            string key = "person%" + x.name;
-            if (preferences.ContainsKey(key))
-                feeling = preferences[key];
+            if (preferences.has("person"))
+                feeling = preferences.get("person", x.name);
 			if (memory.GetLine(x) == null)
 				l = c.speak(this, x, x, feeling, -1);
 			else
 			{
 				float agg = memory.GetLine(x).aggregateLine();
-				if (Mathf.Abs(agg) > .6f)
-				{
+				if (UnityEngine.Random.value < .5f)
 					l = c.speak(this, x, memory.GetLine(x), feeling + agg, -1);
-				}
 				else
 				{
-					l = c.speak(this, x, x, feeling, -1);
-					float r = UnityEngine.Random.value;
-					if (r < .5f)
-						foreach (string s in preferences.Keys)
-						{
-							if (UnityEngine.Random.value > .2f)
-							{
-								l = c.speak(this, x, s, preferences[s], -1);
-								break;
-							}
-						}
+					//l = c.speak(this, x, null_object, 
+					l = c.speak(this, x, memory.GetLine(x), feeling + agg, -1);
 				}
 			}
             x.AddLine(this,l);

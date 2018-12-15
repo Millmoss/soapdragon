@@ -97,30 +97,28 @@ public class LineLibrary
 		}
 
 		List<string> rLine = new List<string>();
-		int newStart = 0;
-		for (int i = 0; i < line.Length; i++)
+		int start = 0;
+
+		for (int i = 1; i < line.Length; i++)
 		{
-			if (line[i] == '.')
+			if (line[i] == '[' && line[i + 1] == '%')
 			{
-				if (line[newStart] != '.')
-				{
-					rLine.Add(line.Substring(newStart, i - newStart));
-					newStart = i;
-				}
-				else if (i + 1 >= line.Length)
-				{
-					rLine.Add(line.Substring(newStart, i - newStart));
-					rLine.Add(line.Substring(i, 1));
-				}
+				//Main.print(line.Substring(start, i - start));
+				rLine.Add(line.Substring(start, i - start));
+				start = i;
 			}
-			else if (line[i] == ' ' || line[i] == ',' || line[i] == '\'' || line[i] == '?')
+			if (line[i] == ']' && line[i - 1] == '%')
 			{
-				if (line[newStart] == '.')
-				{
-					rLine.Add(line.Substring(newStart, i - newStart));
-					newStart = i;
-				}
+				//Main.print(line.Substring(start + 2, (i - start) - 3));
+				rLine.Add(line.Substring(start + 1, (i - start) - 2));
+				start = i + 1;
 			}
+		}
+
+		if (start != line.Length)
+		{
+			//Main.print(line.Substring(start, line.Length - start));
+			rLine.Add(line.Substring(start, line.Length - start));
 		}
 
 		return rLine;
