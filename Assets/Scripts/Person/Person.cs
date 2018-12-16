@@ -320,6 +320,7 @@ public class Person {
         //He wants to talk.
         if (needs["social"] > 0.45f || in_conversation)
         {
+			float lineFeeling = 0;
             Person x = memory.GetRandomPerson(current_place);
             if(x == null)
             {
@@ -344,7 +345,7 @@ public class Person {
 			}
             x.AddLine(this,l);
             ret += l.getLineString();
-            //c.speak(this,x,)
+			needs["social"] += lineFeeling;
         }
         return ret;
     }

@@ -6,9 +6,10 @@ public class Line
 {
 	private Expression[] line;
 	private HashSet<Enums.descriptors> keys;
+	private Noun about;
 	public Enums.lineTypes type { get; private set; }
 
-	public Line(Expression[] l, Enums.lineTypes t)
+	public Line(Expression[] l, Enums.lineTypes t, Noun about)
 	{
 		type = t;
 		line = l;

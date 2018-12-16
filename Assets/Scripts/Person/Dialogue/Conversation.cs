@@ -31,11 +31,15 @@ public class Conversation
 
 			Expression[] eList = new Expression[lineStrings.Count];
 
+			Noun aboutNoun = null;
+
 			for (int i = 0; i < lineStrings.Count; i++)
 			{
 				if (lineStrings[i][0] == '%')
 				{
 					Expression e = determineExpression(from, to, person.name, feeling, lineStrings[i], type, lower);
+					if (e is Noun)
+						aboutNoun = (Noun)e;
 					eList[i] = e;
 				}
 				else
@@ -44,7 +48,7 @@ public class Conversation
 				}
 			}
 
-			Line l = new Line(eList, type);
+			Line l = new Line(eList, type, aboutNoun);
 			return l;
 		}
 
@@ -60,11 +64,15 @@ public class Conversation
 
 			Expression[] eList = new Expression[lineStrings.Count];
 
+			Noun aboutNoun = null;
+
 			for (int i = 0; i < lineStrings.Count; i++)
 			{
 				if (lineStrings[i][0] == '%')
 				{
 					Expression e = determineExpression(from, to, null, feeling, lineStrings[i], type, lower);
+					if (e is Noun)
+						aboutNoun = (Noun)e;
 					eList[i] = e;
 				}
 				else
@@ -73,7 +81,7 @@ public class Conversation
 				}
 			}
 
-			Line l = new Line(eList, type);
+			Line l = new Line(eList, type, aboutNoun);
 			return l;
 		}
 
@@ -85,11 +93,15 @@ public class Conversation
 
 			Expression[] eList = new Expression[lineStrings.Count];
 
+			Noun aboutNoun = null;
+
 			for (int i = 0; i < lineStrings.Count; i++)
 			{
 				if (lineStrings[i][0] == '%')
 				{
 					Expression e = determineExpression(from, to, thing, feeling, lineStrings[i], type, lower);
+					if (e is Noun)
+						aboutNoun = (Noun)e;
 					eList[i] = e;
 				}
 				else
@@ -98,7 +110,7 @@ public class Conversation
 				}
 			}
 
-			Line l = new Line(eList, type);
+			Line l = new Line(eList, type, aboutNoun);
 			return l;
 		}
 
