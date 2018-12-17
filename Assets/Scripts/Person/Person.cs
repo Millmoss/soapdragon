@@ -402,9 +402,11 @@ public class Person {
 				{
 					lineFeeling = -.2f * (features_float["introversion"] + 2);
 					features_float["fear"] += .3f;
+					if (features_float["fear"] > .5f)
+						exitConv = true;
 					l = c.speak(this, x, x, personFeeling, -1);
 				}
-				else if (personFeeling < -.5f || agg < .7f)
+				else if (personFeeling < -.5f || agg < -.7f)
 				{
 					lineFeeling = -.05f * (features_float["introversion"] + 1);
 					l = c.speak(this, x, x, personFeeling, -1);
@@ -424,7 +426,6 @@ public class Person {
 
 						string[] fs = closest.Split(splitPercent);
 						l = c.speak(this, x, closest, preferences.get(fs[0], fs[1], fs[2]), -1);
-						Main.print("HALPEN");
 					}
 					else if (personFeeling > .3f)
 					{
@@ -432,7 +433,6 @@ public class Person {
 							l = c.speak(this, x, x, personFeeling, -1);
 						else
 						{
-							Main.print("HALPEN");
 							string closest = preferences.getClosestMatchingAny(randomMod * 2 - 1, x.name);
 							string[] fs = closest.Split(splitPercent);
 							l = c.speak(this, x, closest, preferences.get(fs[0], fs[1], fs[2]), -1);
@@ -453,7 +453,7 @@ public class Person {
 				}
 			}
 			
-			if (needs["social"] < .2f && x.needs["social"] < .3f || features_float["fear"] > .5f)
+			if (needs["social"] < .2f && x.needs["social"] < .3f)
 			{
 				exitConv = true;
 			}
@@ -462,6 +462,8 @@ public class Person {
 			{
 				in_conversation = false;
 				x.in_conversation = false;
+				memory.WipeLines();
+				x.memory.WipeLines();
 				if (features_float["fear"] > .5f)
 					return name + " is too spooked to talk right now.";
 				else

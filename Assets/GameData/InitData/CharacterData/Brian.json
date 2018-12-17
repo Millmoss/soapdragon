@@ -51,6 +51,7 @@
 	"preferences":
 	[
 		"person%Boy Pool%character:0.05",
+		"person%Jane%character:-0.2",
 		"person%gender%male:0.3",
 		"person%hair%blue:0.2",
 		"person%hair%red:0.4",
@@ -59,7 +60,11 @@
 		"person%eyes%brown:0.3",
 		"person%eyes%red:0.3",
 		"person%gender%female:0.9",
-		"person%gender%nonbinary:0.95"
+		"person%gender%nonbinary:0.95",
+		"thing%coffee%flavor:-0.5",
+		"thing%coffee%effects:1.0",
+		"feature%flavor%sweet:0.5",
+		"place%New Landland%grass:0.1"
 	],
 	
 	"comment5"	: "add memory later"

@@ -226,7 +226,7 @@ public class Conversation
 					else
 					{
 						string[] ns = about.Split(splitPercent);
-						Noun n = new Noun(ns[2], Enums.generalTypes.thing, ns[2]);
+						Noun n = new Noun(ns[1], Enums.generalTypes.thing, ns[1]);
 						e = n;
 					}
 					break;
@@ -234,8 +234,8 @@ public class Conversation
 				case "%noun%feature":
 				{
 					Noun n;
-					string f = about.Split(splitPercent)[1];
-					n = new Noun(f, Enums.generalTypes.feature, about.Split(splitPercent)[2]);
+					string f = about.Split(splitPercent)[2];
+					n = new Noun(f, Enums.generalTypes.feature, about.Split(splitPercent)[1]);
 					e = n;
 					break;
 				}
