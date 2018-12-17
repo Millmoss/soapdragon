@@ -93,7 +93,19 @@ public class Place
     //Add things to a position
     public void AddThings(Vector2Int _pos, List<Thing> _things)
     {
-        things[_pos] = _things;
+        if (!things.ContainsKey(_pos))
+            things[_pos] = _things;
+        else
+            foreach (Thing x in _things)
+                things[_pos].Add(x);
+    }
+
+    //Add a thing to a position
+    public void AddThing(Thing _thing)
+    {
+        if (!things.ContainsKey(_thing.position))
+            things[_thing.position] = new List<Thing>();
+            things[_thing.position].Add(_thing);
     }
 
     //Add people to a position

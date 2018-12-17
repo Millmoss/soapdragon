@@ -9,7 +9,7 @@ public class Thing	//I wanted to call it object but obviously that's not a good 
 	public Vector2Int position { get; set; }
 	public int weight { get; private set; }
 	public int durability { get; private set; }	//goes down by 1 if use causes damage. high for things like anvils, low for food and glass
-	public int nutrition { get; private set; }	//the nutritional value of an object, can be negative
+	public float nutrition { get; private set; }	//the nutritional value of an object, can be negative
 
 	public float effect { get; private set; }	//effectiveness. like how well it cooks, how good it tastes, how much it heals. context specific
 	public int useTime { get; private set; }	//time it takes to use it
@@ -18,7 +18,7 @@ public class Thing	//I wanted to call it object but obviously that's not a good 
 	private HashSet<Enums.constraints> constraintKeys;     //all restricting keywords for this object (stationary, indestructable, etc(?))
 	private HashSet<string> featureKeys;		//all description keywords for this object (tasty, yellow, spiky, iron, stupid, dumb, i don't like it, i hate it, etc)
 
-	public Thing(string nm, Vector2Int pos, int wt, int dur, int nut, float eff, int utm, HashSet<Enums.uses> ukey, HashSet<Enums.constraints> ckey, HashSet<string> fkey)
+	public Thing(string nm, Vector2Int pos, int wt, int dur, float nut, float eff, int utm, HashSet<Enums.uses> ukey, HashSet<Enums.constraints> ckey, HashSet<string> fkey)
 	{
 		name = nm;
 		position = pos;

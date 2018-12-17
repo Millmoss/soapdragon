@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.Tilemaps;
 using UnityEngine;
 
 public class Person {
@@ -11,17 +12,21 @@ public class Person {
 	public string name { get; private set; }
     public int eyesight { get; private set; }
     private Vector2Int position;
-    private Enums.rotations rotation;
+    public Enums.rotations rotation { get; private set; }
 	public Memory memory { get; private set; }
 	public Place current_place { get; private set; }
     public Conversation c;
     public bool in_conversation { get; private set; }
+    public Tilemap tm;
+    public Tile t;
+    public Tile def;
+    public List<Vector3Int> clr = new List<Vector3Int>();
 
     Dictionary<string, float> needs = new Dictionary<string, float>()
     {
         {"hunger", 0 },
         {"social", 0 },
-        {"thrist",0 },
+        {"thirst",0 },
         {"tiredness",0 },
         {"stress", 0f },
         {"libido", 0f }
@@ -213,71 +218,89 @@ public class Person {
     public void AddLine(Person p, Line l)
     {
         memory.AddLine(p, l);
-        memory.AddPerson(current_place.name, p.Position, p);
+        memory.AddPerson(current_place.name, p.position, p);
         in_conversation = true;
         //Manipulate preferences based on the given line.
     }
+    
+    //Each step this function is called; live "updates"
+    public void Update(Dictionary<Vector2Int, List<Person>> ppl, Dictionary<Vector2Int, List<Thing>> thngs)
+    {
 
-	//Each step this function is called; live "updates"
-	public void Update(Dictionary<Vector2Int, List<Person>> ppl, Dictionary<Vector2Int, List<Thing>> thngs)
-	{
-		Debug.Log(rotation);
+      //  foreach (Vector3Int x in clr)
+           // tm.SetTile(x, def);
 
-		Vector2Int checkPos = new Vector2Int();
-		//Check everything in eyesight range.
-		int comp = 1;
-		if (rotation == Enums.rotations.S)
-			comp *= -1;
-		for (int y = 0; y < eyesight; y++)
-		{
-			if (rotation == Enums.rotations.N || rotation == Enums.rotations.S)
-				checkPos.y = y + 1;
-			else
-				checkPos.x = y + 1;
-			checkPos.y *= comp;
-			for (int x = -y; x <= y; x++)
-			{
-				if (rotation == Enums.rotations.N || rotation == Enums.rotations.S)
-					checkPos.x = x;
-				else
-					checkPos.y = x;
-				//First we remove all memory of thigns @ the chcked positions.
-				memory.RemoveAllThings(current_place.name, checkPos);
-				//We do the same with the people as well.
-				memory.RemoveAllPeople(current_place.name, checkPos);
+        Vector2Int checkPos = position;
+        //Check everything in eyesight range.
+        int comp = 1;
+        if (rotation == Enums.rotations.S || rotation == Enums.rotations.W)
+            comp *= -1;
+        for (int y = 0; y < eyesight; y++)
+        {
+            if (rotation == Enums.rotations.N || rotation == Enums.rotations.S)
+                checkPos.y += comp;
+            else
+                checkPos.x += comp;
+            for (int x = -y; x <= y; x++)
+            {
+                if (rotation == Enums.rotations.N || rotation == Enums.rotations.S)
+                    checkPos.x = position.x + x;
+                else
+                    checkPos.y = position.y + x;
+                
+                Vector3Int tmpPos = new Vector3Int(checkPos.x, checkPos.y, 0);
+                //tm.SetTile(tmpPos, t);
+                clr.Add(tmpPos);
+                //First we remove all memory of thigns @ the chcked positions.
+                memory.RemoveAllThings(current_place.name, checkPos);
+                //We do the same with the people as well.
+                memory.RemoveAllPeople(current_place.name, checkPos);
 
-				//Now we go through and readd everything to to the memory using the new knowledge we have.
-				if (thngs.ContainsKey(checkPos))
-				{
-					foreach (Thing obj in thngs[checkPos])
-					{
-						memory.AddThing(current_place.name, checkPos, obj);
-					}
-				}
-				if (ppl.ContainsKey(checkPos))
-				{
-					Debug.Log("WOW!");
-					foreach (Person prsn in ppl[checkPos])
-					{
-						memory.AddPerson(current_place.name, checkPos, prsn);
-					}
-				}
-			}
-		}
+                //Now we go through and readd everything to to the memory using the new knowledge we have.
+                if (thngs.ContainsKey(checkPos))
+                {
+                    foreach (Thing obj in thngs[checkPos])
+                    {
+                        memory.AddThing(current_place.name, checkPos, obj);
+                        Debug.Log(obj.name);
+                    }
+                }
+                if (ppl.ContainsKey(checkPos))
+                {
+                    foreach (Person prsn in ppl[checkPos])
+                    {
+                        memory.AddPerson(current_place.name, checkPos, prsn);
+                    }
+                }
+            }
+        }
+
+        //Tick hunger / social stat.
+        if (needs["hunger"] < 1)
+        {
+            needs["hunger"] = Mathf.Clamp01(needs["hunger"] + 0.025f);
+        }
+
+        if (needs["social"] < 1)
+        {
+            needs["social"] = Mathf.Clamp01(needs["social"] + 
+                (1.5f - features_float["introversion"]) * 0.015f);
+        }
+        
+        if(needs["thirst"] < 1)
+        {
+            needs["thirst"] = Mathf.Clamp01(needs["thirst"] + 0.015f);
+        }
+        if (needs["tiredness"] < 1)
+        {
+            needs["tiredness"] = Mathf.Clamp01(needs["tiredness"] + 0.015f);
+        }
+        if (needs["libido"] < 1)
+        {
+            needs["libido"] = Mathf.Clamp01(needs["tiredness"] + 0.0000000001f);
+        }
 
 
-
-
-		//Tick hunger / social stat.
-		if (needs["hunger"] < 1)
-		{
-			needs["hunger"] += 0.1f;
-		}
-
-		if (needs["social"] < 1 && !in_conversation)
-		{
-			needs["social"] += (1.5f - features_float["introversion"]) * 0.0245f;
-		}
 
 		if (features_float["fear"] > .1f)
 			features_float["fear"] -= .05f;
@@ -294,7 +317,7 @@ public class Person {
         if (ps != "")
         {
             ret += "\n";
-            ret += ps;
+            ret += name+" says : " +ps;
         }
         return ret;
 
@@ -501,15 +524,19 @@ public class Person {
             current_action.value = next_action.value;
         }
         //Basic movement algorithm
-        if (wanted_object == null)
+        if (wanted_object == null || wanted_object == null_object)
         {
             bool found = false;
+            Debug.Log("E");
             //If we remmeber there is a item @ position, we set that as the item we want to get to to interact with.
             if(memory.remember_items.ContainsKey(current_place.name))
             {
                 foreach (memory_thing item in memory.remember_items[current_place.name])
                 {
-                    if (Enums.IsInDictionary(item.thing.uses, current_action.action))
+                    Debug.Log(item.thing.uses);
+                    Debug.Log(current_action.action);
+                    if (item.thing.durability > 0 &&
+                        Enums.IsInDictionary(item.thing.uses, current_action.action))
                     {
                         found = true;
                         wanted_object = item.thing;
@@ -540,32 +567,70 @@ public class Person {
                 //Big switch case odds are? This is EAT
                 if (wanted_object.durability > 0)
                 {
-                    if (current_action.action == Enums.actions.eat)
+                    switch (current_action.action)
                     {
-                        if (needs["hunger"] < 1)
-                        {
+                        case Enums.actions.hunger:
                             //TODO: Add handling when duravility is 0.
                             wanted_object.Damage();
                             needs["hunger"] = Mathf.Clamp(needs["hunger"] + wanted_object.nutrition, 0, 1);
 
-                            return name + " is doing action " + next_action.action + " with original intention of " + next_action.value + " onto " + wanted_object.name +
-                                " and his new hunger value is " + needs["hunger"] + ".";
-                        }
-                        else
-                        {
-                            return FinishedAction();
-                        }
+                            return name + " is eating.";
+   
+                        case Enums.actions.tired:
+                            wanted_object.Damage();
+                            needs["tiredness"] = Mathf.Clamp(needs["tiredness"] + wanted_object.effect, 0, 1);
+                            return name + " is dealing with his tiredness issues.";
+
+                        case Enums.actions.thirst:
+                            wanted_object.Damage();
+                            needs["thirst"] = Mathf.Clamp(needs["thirst"] + wanted_object.effect, 0, 1);
+                            return name + " is quenching his thirst.";
+
+                        case Enums.actions.stress:
+                            wanted_object.Damage();
+                            needs["stress"] = Mathf.Clamp(needs["stress"] + wanted_object.effect, 0, 1);
+                            return name + " is chilling out.";
+
+                        case Enums.actions.libido:
+                            wanted_object.Damage();
+                            needs["libido"] = Mathf.Clamp(needs["libido"] + wanted_object.effect, 0, 1);
+                            return name + " is doing unspeakable things right now.";
                     }
                 }
                 else
                 {
-                    return name + "'s item is out of durabililty.";
+                    wanted_object = null_object;
+                    return name + "'s thing broke.";
                 }
 
             }
         }
         else
         {
+            int rand = UnityEngine.Random.Range(0,3);
+            Vector2Int augmentPos = new Vector2Int();
+            switch(rand)
+            {
+                case 0:
+                    augmentPos.x++;
+                    rotation = Enums.rotations.E;
+                    break;
+                case 1:
+                    augmentPos.x--;
+                    rotation = Enums.rotations.W;
+                    break;
+                case 2:
+                    augmentPos.y++;
+                    rotation = Enums.rotations.N;
+                    break;
+                case 3:
+                    augmentPos.y--;
+                    rotation = Enums.rotations.S;
+                    break;
+            }
+
+            position += augmentPos;
+
             return name + " has no idea what to do!";
         }
 
@@ -574,9 +639,7 @@ public class Person {
         path_to_obj.RemoveAt(0);
 
 
-        return name + " is moving towards the " + wanted_object.name + " at position " + moveto_position +
-            " with action " + current_action.action + " with intention " + current_action.value +
-            "\nCurrently " + name + " is at now at position " + position;
+        return name + " is moving towards the " + wanted_object.name+".";
 
 
     }
@@ -586,8 +649,7 @@ public class Person {
     {
         //Finished doing the stuff, apply changes.
         string ret = "";
-        ret = name + " is finished with action " + current_action.action + 
-            " and is ready to do something else, with a hunger value of " + needs["hunger"] + ".";
+        ret = name + " is finished with action " + current_action.action +".";
 
         current_action.action = Enums.actions.nothing;
 
