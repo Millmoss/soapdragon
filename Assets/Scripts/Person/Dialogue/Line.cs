@@ -6,13 +6,15 @@ public class Line
 {
 	private Expression[] line;
 	private HashSet<Enums.descriptors> keys;
+	public Noun about { get; private set; }
 	public Enums.lineTypes type { get; private set; }
 
-	public Line(Expression[] l, Enums.lineTypes t)
+	public Line(Expression[] l, Enums.lineTypes t, Noun a)
 	{
 		type = t;
 		line = l;
 		keys = new HashSet<Enums.descriptors>();
+		about = a;
 
 		for (int i = 0; i < line.Length; i++)
 		{

@@ -12,6 +12,8 @@ public class Main : MonoBehaviour {
     Conversation c;
     public Tilemap floor;
     public Tile def, vision;
+    private Person jane;
+    private int current_tick = 0;
 
     Place cur_room = new Place(new Rectangle(new Vector2Int(0, 0), 5, 5, 0),"Home");
 
@@ -21,12 +23,17 @@ public class Main : MonoBehaviour {
         lp = FileManager.initPersons(cur_room);
         foreach (Person p in lp)
         {
-            p.tm = floor;
-            p.t = vision;
-            p.def = def;
-            p.c = c;
-            cur_room.AddPeople(p.Position, new List<Person>() { p });
-            vc.AddPerson(p);
+            if (p.name != "Jane")
+            {
+                p.tm = floor;
+                p.t = vision;
+                p.def = def;
+                p.c = c;
+                cur_room.AddPeople(p.Position, new List<Person>() { p });
+                vc.AddPerson(p);
+            }
+            else
+                jane = p;
         }
 
         List<Thing> thngs = new List<Thing>();
@@ -75,10 +82,24 @@ public class Main : MonoBehaviour {
     {
         if(Input.GetKeyDown(KeyCode.Space))
         {
-            
             if(txt.IsTextComplete())
             {
-                txt.SetText(cur_room.PeopleActivate());
+                current_tick++;
+                string tmp = "";
+                if (current_tick > 20 && jane != null)
+                {
+                    Person p = jane;
+
+                    p.tm = floor;
+                    p.t = vision;
+                    p.def = def;
+                    p.c = c;
+                    cur_room.AddPeople(p.Position, new List<Person>() { p });
+                    vc.AddPerson(p);
+                    jane = null;
+                    tmp = "Jane has logged in.\n";
+                }
+                txt.SetText(tmp+cur_room.PeopleActivate());
                 cur_room.PeopleUpdate();
                 vc.UpdateTilemap();
             }

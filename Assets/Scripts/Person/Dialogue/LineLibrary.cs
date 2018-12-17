@@ -14,6 +14,7 @@ public class LineLibrary
 	public string[] questionReason;
 	public string[] answerRequest;
 	public string[] answerDanger;
+	public string[] greeting;
 
 	public static LineLibrary CreateFromJSON(string jsonString)
 	{
@@ -88,6 +89,13 @@ public class LineLibrary
 					int size = answerDanger.Length;
 					int index = Mathf.FloorToInt(Random.value * size);
 					line = answerDanger[index];
+					break;
+				}
+				case Enums.lineTypes.greeting:
+				{
+					int size = greeting.Length;
+					int index = Mathf.FloorToInt(Random.value * size);
+					line = greeting[index];
 					break;
 				}
 				default:

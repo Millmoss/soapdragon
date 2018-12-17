@@ -18,7 +18,7 @@ public class Memory {
     public Dictionary<string, List<memory_person>> remember_people;
 
     //Last thing we remember a person saying to us.
-    public Dictionary<Person, Line> said_to;
+    public List<KeyValuePair<Person, Line>> lines_said;
 
     public Memory()
     {
@@ -26,21 +26,49 @@ public class Memory {
         items_assoc = new Dictionary<string, List<Enums.actions>>();
         remember_items = new Dictionary<string, List<memory_thing>>();
         remember_people = new Dictionary<string, List<memory_person>>();
-        said_to = new Dictionary<Person, Line>();
-    }
+		lines_said = new List<KeyValuePair<Person, Line>>();
+	}
 
     public void AddLine(Person p, Line l)
     {
-        said_to[p] = l;
+		lines_said.Add(new KeyValuePair<Person, Line>(p, l));
+		if (lines_said.Count > 5)
+			lines_said.RemoveAt(0);
     }
 
     //Given a person, returns the last line they said to them. Returns null if there is no memory.
     public Line GetLine(Person p)
     {
-        if(said_to.ContainsKey(p))
-            return said_to[p];
-        return null;
+		for (int i = lines_said.Count; i > 0; i--)
+		{
+			if (lines_said[i - 1].Key == p)
+				return lines_said[i - 1].Value;
+		}
+
+		return null;
     }
+
+	public void WipeLines()
+	{
+		lines_said = new List<KeyValuePair<Person, Line>>();
+	}
+
+	public string DetermineAppropriateLine()
+	{
+		if (lines_said.Count == 0)
+			return "greeting";
+
+		if (lines_said[lines_said.Count - 1].Value.type == Enums.lineTypes.greeting)
+		{
+			if (lines_said.Count == 1)
+				return "greeting";
+
+			if (lines_said[lines_said.Count - 2].Value.type != Enums.lineTypes.greeting)
+				return "greeting";
+		}
+
+		return "normal";
+	}
 
     public List<Thing> GetThings(string place_name)
     {

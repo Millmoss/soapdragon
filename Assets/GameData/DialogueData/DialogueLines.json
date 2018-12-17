@@ -52,12 +52,7 @@
 	"questionReason" :
 	[
 		"Why?",
-		"Why?",
-		"Why?",
 		"Can you explain?",
-		"Can you explain?",
-		"Can you explain?",
-		"What?",
 		"What?",
 		"The fuck you saying?"
 	],
@@ -68,10 +63,18 @@
 		"No!"
 	],
 	
-	"answerDanger" :
+	"greeting" :
 	[
-		"Oh shit.",
-		"Well fuck.",
-		"Uhhhh."
+		"Hi.",
+		"Hi!",
+		"Hello there.",
+		"Good day.",
+		"Sup.",
+		"Yo.",
+		"Hey.",
+		"Howdy.",
+		"G'day.",
+		"Nice day we're having.",
+		"Yo wassup."
 	]
 }

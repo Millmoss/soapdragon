@@ -1,7 +1,7 @@
 {
 	"comment0"	: "initialization info",
 	
-	"xPosition"	: 1,
+	"xPosition"	: 2,
 	"yPosition" : 3,
 	"rotation"	: 2,
 	
@@ -26,7 +26,7 @@
 	
 	"happiness"	: 0.0,
 	"sadness"	: 0.5,
-	"anger"		: 0.9,
+	"anger"		: 0.2,
 	"fear"		: 0.2,
 	"disgust"	: 0.4,
 	
@@ -50,13 +50,13 @@
 	
 	"preferences":
 	[
-		"person%Boy Pool%attitude:-0.2",
-		"person%gender%male:-1.0",
+		"person%Boy Pool%character:-0.2",
+		"person%gender%male:-0.2",
 		"person%hair%blue:-0.2",
 		"person%hair%red:0.4",
 		"person%physical%muscle:1.0",
-		"person%mental%wit:-1.0",
-		"person%eyes%brown:-1.0",
+		"person%mental%wit:-0.3",
+		"person%eyes%brown:-0.3",
 		"person%eyes%red:1.0",
 		"person%gender%female:0.8",
 		"person%gender%nonbinary:-0.2"

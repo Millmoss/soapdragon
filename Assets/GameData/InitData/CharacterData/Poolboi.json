@@ -51,18 +51,19 @@
 	
 	"preferences":
 	[
-		"person%Jane%attitude:0.3",
-		"person%gender%male:1.0",
+		"person%Jane%character:0.3",
+		"person%gender%male:0.9",
 		"person%hair%blue:0.9",
 		"person%hair%red:0.5",
-		"person%muscle%0.6:0.1",
-		"person%wit%0.2:0.8",
 		"person%eyes%brown:-0.2",
 		"person%eyes%red:0.1",
 		"person%gender%female:0.5",
-		"person%gender%nonbinary:0.7"
+		"person%gender%nonbinary:0.7",
+		"place%pool%water:0.9",
+		"thing%bee%knees:-1.0",
+		"thing%dog%goodness:0.5",
+		"place%desert%dryness:-0.7"
 	],
-
 	
 	"comment5"	: "add memory later"
 }
