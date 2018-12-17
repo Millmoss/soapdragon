@@ -72,6 +72,7 @@ public class Main : MonoBehaviour {
             cur_room.AddThing(thngs[i]);
             vc.AddThing(thngs[i]);
         }
+        cur_room.boundries = new Vector2Int(8, 8);
         cur_room.PeopleUpdate();
 
         c = new Conversation();

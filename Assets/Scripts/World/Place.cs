@@ -15,6 +15,8 @@ public class Place
     private Dictionary<Vector2Int, List<Person>> people = new Dictionary<Vector2Int, List<Person>>();
     private Dictionary<Vector2Int, List<Thing>> things = new Dictionary<Vector2Int, List<Thing>>();
     public string name { get; private set; }
+    //add to consturctor later.
+    public Vector2Int boundries;
 
     public Place(Rectangle r, string _name)
 	{

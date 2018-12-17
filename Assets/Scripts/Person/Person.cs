@@ -516,7 +516,7 @@ public class Person {
         if (current_action.action != next_action.action)
         {
             current_action = next_action;
-
+            wanted_object = null_object;
             return name + " realized he needed to satisfy " + current_action.action + " with a value of " + next_action.value;
         }
         else
@@ -527,7 +527,6 @@ public class Person {
         if (wanted_object == null || wanted_object == null_object)
         {
             bool found = false;
-            Debug.Log("E");
             //If we remmeber there is a item @ position, we set that as the item we want to get to to interact with.
             if(memory.remember_items.ContainsKey(current_place.name))
             {
@@ -608,6 +607,19 @@ public class Person {
         else
         {
             int rand = UnityEngine.Random.Range(0,3);
+            if (rand == 0)
+                if (position.x + 1 > current_place.boundries.x)
+                    rand++;
+            if (rand == 1)
+                if (position.x - 1 < -current_place.boundries.x)
+                    rand--;
+            if (rand == 2)
+                if (position.y + 1 > current_place.boundries.y)
+                    rand++;
+            if (rand == 3)
+                if (position.y - 1 < current_place.boundries.y)
+                    rand--;
+
             Vector2Int augmentPos = new Vector2Int();
             switch(rand)
             {
@@ -635,6 +647,39 @@ public class Person {
         }
 
         //Move towards item; use actual pathfinding at some point.
+
+        int pos = -1;
+        if ((position - path_to_obj[0]).x < 0)
+        {
+            pos = 1;
+        }
+        else if ((position - path_to_obj[0]).y > 0)
+        {
+            pos = 2;
+        }
+        else if ((position - path_to_obj[0]).y < 0)
+        {
+            pos = 3;
+        }
+        else
+            pos = 0;
+
+
+        switch (pos)
+        {
+            case 0:
+                rotation = Enums.rotations.E;
+                break;
+            case 1:
+                rotation = Enums.rotations.W;
+                break;
+            case 2:
+                rotation = Enums.rotations.N;
+                break;
+            case 3:
+                rotation = Enums.rotations.S;
+                break;
+        }
         position = path_to_obj[0];
         path_to_obj.RemoveAt(0);
 
