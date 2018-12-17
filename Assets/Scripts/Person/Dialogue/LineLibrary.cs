@@ -6,7 +6,8 @@ using UnityEngine;
 public class LineLibrary
 {
 	public string[] opinionDirected;
-	public string[] opinionUndirected;
+	public string[] opinionUndirectedPerson;
+	public string[] opinionUndirectedOther;
 	public string[] requestDirected;
 	public string[] insultDirected;
 	public string[] threatDirected;
@@ -35,11 +36,18 @@ public class LineLibrary
 					line = opinionDirected[index];
 					break;
 				}
-				case Enums.lineTypes.opinionUndirected:
+				case Enums.lineTypes.opinionUndirectedPerson:
 				{
-					int size = opinionUndirected.Length;
+					int size = opinionUndirectedPerson.Length;
 					int index = Mathf.FloorToInt(Random.value * size);
-					line = opinionUndirected[index];
+					line = opinionUndirectedPerson[index];
+					break;
+				}
+				case Enums.lineTypes.opinionUndirectedOther:
+				{
+					int size = opinionUndirectedOther.Length;
+					int index = Mathf.FloorToInt(Random.value * size);
+					line = opinionUndirectedOther[index];
 					break;
 				}
 				case Enums.lineTypes.requestDirected:

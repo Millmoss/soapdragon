@@ -8,7 +8,7 @@
 		"You are [%amountAdverb%] [%feelingAdjective%]."
 	],
 	
-	"opinionUndirected" :
+	"opinionUndirectedPerson" :
 	[
 		"I [%feelingVerb%] [%noun%].",
 		"I [%feelingVerb%] [%noun%feature%].",
@@ -16,6 +16,16 @@
 		"I [%amountAdverb%] [%feelingVerb%] [%noun%].",
 		"I [%amountAdverb%] [%feelingVerb%] [%noun%feature%].",
 		"I [%amountAdverb%] [%feelingVerb%] [%noun%]'s [%noun%feature%]."
+	],
+	
+	"opinionUndirectedOther" :
+	[
+		"I [%feelingVerb%] [%noun%].",
+		"I [%feelingVerb%] [%noun%feature%].",
+		"I [%feelingVerb%] [%noun%] [%noun%feature%].",
+		"I [%amountAdverb%] [%feelingVerb%] [%noun%].",
+		"I [%amountAdverb%] [%feelingVerb%] [%noun%feature%].",
+		"I [%amountAdverb%] [%feelingVerb%] [%noun%] [%noun%feature%]."
 	],
 	
 	"requestDirected" :

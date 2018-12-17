@@ -135,7 +135,7 @@ public class Conversation
 			}
 			else
 			{
-				type = Enums.lineTypes.opinionUndirected;
+				type = Enums.lineTypes.opinionUndirectedPerson;
 			}
 		}
 		else if (aboutType == "string")
@@ -143,7 +143,7 @@ public class Conversation
 			if (about == "greeting")
 				type = Enums.lineTypes.greeting;
 			else
-				type = Enums.lineTypes.opinionUndirected;
+				type = Enums.lineTypes.opinionUndirectedOther;
 		}
 		else if (aboutType == "line")
 		{

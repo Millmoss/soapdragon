@@ -13,7 +13,7 @@ public static class Enums  {
     public enum color		{ red, blue, green, brown, white, black, pink };
 	public enum descriptors { hostile, friendly, helpful, harmful, dangerous, safe, agreeable, disagreeable, loving }    //there will be a LOT of these, keeping it low for now
 
-	public enum lineTypes	{ opinionDirected, opinionUndirected, requestDirected, insultDirected, threatDirected, opinionOpinionSimple, questionReason, answerRequest, answerDanger, greeting }
+	public enum lineTypes	{ opinionDirected, opinionUndirectedPerson, opinionUndirectedOther, requestDirected, insultDirected, threatDirected, opinionOpinionSimple, questionReason, answerRequest, answerDanger, greeting }
 	public enum expressionTypes	{ feelingVerb, feelingAdjective, amountAdverb, agreementVerb }
 	public enum generalTypes { thing, person, place, feature, line }
 

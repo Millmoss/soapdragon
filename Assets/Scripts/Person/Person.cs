@@ -328,10 +328,12 @@ public class Person {
         {
 			float lineFeeling = 0;
             Person x = memory.GetRandomPerson(current_place);
-            if(x == null)
-            {
-                return "There is no one around to talk to.";
+			if (x == null || (x.in_conversation == true && !in_conversation))	//HERE
+			{
+				return "There is no one around to talk to for " + name + ".";
 			}
+			in_conversation = true;
+			x.in_conversation = true;
             Line l;
             float personFeeling = 0;
 			float randomMod = UnityEngine.Random.value;
@@ -359,7 +361,6 @@ public class Person {
 			{
 				float agg = lastLine.aggregateLine();
 				lineFeeling = -.05f * (features_float["introversion"] + 1);
-				//Main.print(lastLine.getLineString() + " : " + agg);	//USE LATER
 
 				string response = memory.DetermineAppropriateLine();
 
@@ -398,7 +399,7 @@ public class Person {
 				}
 
 				//responding to last line
-				if (lastLine.type == Enums.lineTypes.threatDirected)
+				if (lastLine.type == Enums.lineTypes.threatDirected)	//last line was a threat
 				{
 					lineFeeling = -.2f * (features_float["introversion"] + 2);
 					features_float["fear"] += .3f;
@@ -406,13 +407,13 @@ public class Person {
 						exitConv = true;
 					l = c.speak(this, x, x, personFeeling, -1);
 				}
-				else if (personFeeling < -.5f || agg < -.7f)
+				else if (personFeeling < -.5f || agg < -.7f)			//last line was very negative or feeling toward person is very negative
 				{
 					lineFeeling = -.05f * (features_float["introversion"] + 1);
 					l = c.speak(this, x, x, personFeeling, -1);
 					preferences.mod("person", x.name, "character", -(features_float["anger"] + needs["stress"] + features_float["disgust"]) / 80);
 				}
-				else if (response == "greeting")
+				else if (response == "greeting")						//last line was a greeting
 				{
 					l = c.speak(this, x, "greeting", personFeeling, -1);
 					float sm = needs["social"] - .45f;
@@ -420,14 +421,14 @@ public class Person {
 				}
 				else
 				{
-					if (Mathf.Abs(personFeeling) <= .1f)
+					if (Mathf.Abs(personFeeling) <= .1f)				//feeling toward person is very neutral
 					{
 						string closest = preferences.getClosestMatchingAny(randomMod, x.name);
 
 						string[] fs = closest.Split(splitPercent);
 						l = c.speak(this, x, closest, preferences.get(fs[0], fs[1], fs[2]), -1);
 					}
-					else if (personFeeling > .3f)
+					else if (personFeeling > .3f)						//feeling toward person is reasonably positive
 					{
 						if (UnityEngine.Random.value > .7f)
 							l = c.speak(this, x, x, personFeeling, -1);
@@ -438,7 +439,7 @@ public class Person {
 							l = c.speak(this, x, closest, preferences.get(fs[0], fs[1], fs[2]), -1);
 						}
 					}
-					else
+					else												//feeling toward person is either barely positive or is negative
 					{
 						lineFeeling = -.05f * (features_float["introversion"] + 1);
 						if (UnityEngine.Random.value > .5f)
@@ -470,9 +471,9 @@ public class Person {
 					return name + " is finished talking.";
 			}
 
-
-			AddLine(this, l);
+			memory.AddLine(this, l);
             x.AddLine(this,l);
+			ret += name + " speaks to " + x.name + " : ";
             ret += l.getLineString();
 			needs["social"] += lineFeeling;
 
