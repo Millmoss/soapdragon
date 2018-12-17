@@ -1,54 +1,71 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class Main : MonoBehaviour {
 
     public PrintText txt;
     public Vector2Int boundries;
+    public Visual_Controller vc;
+    List<Person> lp;
     Conversation c;
+    public Tilemap floor;
+    public Tile def, vision;
 
     Place cur_room = new Place(new Rectangle(new Vector2Int(0, 0), 5, 5, 0),"Home");
 
     private void Start()
     {
         c = new Conversation();
-        List<Person> lp = FileManager.initPersons(cur_room);
-        foreach(Person p in lp)
+        lp = FileManager.initPersons(cur_room);
+        foreach (Person p in lp)
         {
+            p.tm = floor;
+            p.t = vision;
+            p.def = def;
             p.c = c;
             cur_room.AddPeople(p.Position, new List<Person>() { p });
+            vc.AddPerson(p);
         }
 
         List<Thing> thngs = new List<Thing>();
-        thngs.Add(new Thing("Ice Cream", new Vector2Int(0, 5), 200, 2, 1, 2f, 3,
-            new HashSet<Enums.uses>() { Enums.uses.food }, new HashSet<Enums.constraints>() { Enums.constraints.made_from_human_flesh },
+        thngs.Add(new Thing("Ice Cream Maker", new Vector2Int(0, 5), 200, 2, -0.15f, 2f, 3,
+            new HashSet<Enums.uses>() { Enums.uses.food }, new HashSet<Enums.constraints>()
+            { Enums.constraints.made_from_human_flesh },
             new HashSet<string>() { "bold", "brash", "belongs", "trash" }
             ));
 
-        List<Thing> bing = new List<Thing>();
-        bing.Add(new Thing("Cheesecake", new Vector2Int(0, -5), 200, 2, 1, 2f, 3,
-            new HashSet<Enums.uses>() { Enums.uses.food }, new HashSet<Enums.constraints>() { Enums.constraints.made_from_human_flesh },
-            new HashSet<string>() { "bold", "brash", "belongs", "trash" }
+        thngs.Add(new Thing("Coffee Injector", new Vector2Int(3, 6), 300, 5, -0.15f, -0.35f, 1,
+            new HashSet<Enums.uses>() { Enums.uses.tired }, new HashSet<Enums.constraints>()
+            { Enums.constraints.made_from_human_flesh },
+            new HashSet<string>() { "strange", "drugs", "injection", "illegal" }
             ));
 
-        List<Thing> ying = new List<Thing>();
-        ying.Add(new Thing("Apple", new Vector2Int(0, -5), 200, 2, 1, 2f, 3,
-            new HashSet<Enums.uses>() { Enums.uses.food }, new HashSet<Enums.constraints>() { Enums.constraints.made_from_human_flesh },
-            new HashSet<string>() { "bold", "brash", "belongs", "trash" }
-            ));
+        thngs.Add(new Thing("Bottle of infinite water", new Vector2Int(-3, -2), 10, 9999, -0.05f, -0.15f, 1,
+     new HashSet<Enums.uses>() { Enums.uses.thirst }, new HashSet<Enums.constraints>()
+     { Enums.constraints.made_from_human_flesh },
+     new HashSet<string>() { "liquid","water" }
+     ));
 
+        thngs.Add(new Thing("stress ball", new Vector2Int(3, -3), 10, 10, -0.225f, -0.185f, 1,
+     new HashSet<Enums.uses>() { Enums.uses.stress }, new HashSet<Enums.constraints>()
+     { Enums.constraints.made_from_human_flesh },
+     new HashSet<string>() { "ball" }
+     ));
 
-        List<Thing> ding = new List<Thing>();
-        ding.Add(new Thing("Fruitcake", new Vector2Int(0, -5), 200, 2, 1, 2f, 3,
-            new HashSet<Enums.uses>() { Enums.uses.food }, new HashSet<Enums.constraints>() { Enums.constraints.made_from_human_flesh },
-            new HashSet<string>() { "bold", "brash", "belongs", "trash" }
-            ));
-
-        cur_room.AddThings(new Vector2Int(0, 5), thngs);
-        cur_room.AddThings(new Vector2Int(0, -5), bing);
-        cur_room.AddThings(new Vector2Int(-5, 0), ying);
-        cur_room.AddThings(new Vector2Int(5, 0), ding);
+        thngs.Add(new Thing("dont bring this to school kids", new Vector2Int(0, -7), 2000, 1, 
+            -0.05f, -0.99f, 1,
+     new HashSet<Enums.uses>() { Enums.uses.libido }, new HashSet<Enums.constraints>()
+     { Enums.constraints.made_from_human_flesh },
+     new HashSet<string>() { "not_very_sexy" }
+     ));
+        for (int i = 0;i<thngs.Count;i++)
+        {
+            cur_room.AddThing(thngs[i]);
+            vc.AddThing(thngs[i]);
+        }
+        cur_room.PeopleUpdate();
 
         c = new Conversation();
     }
@@ -61,8 +78,9 @@ public class Main : MonoBehaviour {
             
             if(txt.IsTextComplete())
             {
-                cur_room.PeopleUpdate();
                 txt.SetText(cur_room.PeopleActivate());
+                cur_room.PeopleUpdate();
+                vc.UpdateTilemap();
             }
             else
             {
@@ -71,16 +89,10 @@ public class Main : MonoBehaviour {
         }
         if(Input.GetKeyDown(KeyCode.P))
         {
-            List<Vector2Int> x = Pathfinding.GetPath(new Vector2Int(2, 2),
-                new Vector2Int(4, 5 ),
-                new List<Vector2Int>() { new Vector2Int(3, 5), new Vector2Int(4,4), new Vector2Int(4,6) },
-                new Vector2Int(4,4));
-
-            foreach(Vector2Int p in x)
+            foreach(Person p in lp)
             {
-                Debug.Log(p);
+                Debug.Log(lp[0].memory.GetRandomPerson(cur_room).name);
             }
-
         }
     }
 
