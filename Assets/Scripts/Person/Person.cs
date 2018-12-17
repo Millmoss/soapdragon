@@ -130,12 +130,12 @@ public class Person {
 		features_float["anger"] = pd.anger;
 		features_float["fear"] = pd.fear;
 		features_float["disgust"] = pd.disgust;
-		features_float["hunger"] = pd.hunger;
-		features_float["thirst"] = pd.thirst;
-		features_float["tiredness"] = pd.tiredness;
-		features_float["social"] = pd.social;
-		features_float["stress"] = pd.stress;
-		features_float["libido"] = pd.libido;
+		needs["hunger"] = pd.hunger;
+		needs["thirst"] = pd.thirst;
+		needs["tiredness"] = pd.tiredness;
+		needs["social"] = pd.social;
+		needs["stress"] = pd.stress;
+		needs["libido"] = pd.libido;
 
 		for (int i = 0; i < pd.features.Length; i++)
 		{
@@ -218,66 +218,71 @@ public class Person {
         //Manipulate preferences based on the given line.
     }
 
-    //Each step this function is called; live "updates"
-    public void Update(Dictionary<Vector2Int, List<Person>> ppl, Dictionary<Vector2Int, List<Thing>> thngs)
-    {
-        Debug.Log(rotation);
+	//Each step this function is called; live "updates"
+	public void Update(Dictionary<Vector2Int, List<Person>> ppl, Dictionary<Vector2Int, List<Thing>> thngs)
+	{
+		Debug.Log(rotation);
 
-        Vector2Int checkPos = new Vector2Int();
-        //Check everything in eyesight range.
-        int comp = 1;
-        if (rotation == Enums.rotations.S)
-            comp *= -1;
-        for (int y = 0; y < eyesight; y++)
-        {
-            if (rotation == Enums.rotations.N || rotation == Enums.rotations.S)
-                checkPos.y = y + 1;
-            else
-                checkPos.x = y + 1;
-            checkPos.y *= comp;
-            for (int x = -y; x <= y; x++)
-            {
-                if (rotation == Enums.rotations.N || rotation == Enums.rotations.S)
-                    checkPos.x = x;
-                else
-                    checkPos.y = x;
-                //First we remove all memory of thigns @ the chcked positions.
-                memory.RemoveAllThings(current_place.name, checkPos);
-                //We do the same with the people as well.
-                memory.RemoveAllPeople(current_place.name, checkPos);
+		Vector2Int checkPos = new Vector2Int();
+		//Check everything in eyesight range.
+		int comp = 1;
+		if (rotation == Enums.rotations.S)
+			comp *= -1;
+		for (int y = 0; y < eyesight; y++)
+		{
+			if (rotation == Enums.rotations.N || rotation == Enums.rotations.S)
+				checkPos.y = y + 1;
+			else
+				checkPos.x = y + 1;
+			checkPos.y *= comp;
+			for (int x = -y; x <= y; x++)
+			{
+				if (rotation == Enums.rotations.N || rotation == Enums.rotations.S)
+					checkPos.x = x;
+				else
+					checkPos.y = x;
+				//First we remove all memory of thigns @ the chcked positions.
+				memory.RemoveAllThings(current_place.name, checkPos);
+				//We do the same with the people as well.
+				memory.RemoveAllPeople(current_place.name, checkPos);
 
-                //Now we go through and readd everything to to the memory using the new knowledge we have.
-                if (thngs.ContainsKey(checkPos))
-                {
-                    foreach (Thing obj in thngs[checkPos])
-                    {
-                        memory.AddThing(current_place.name, checkPos, obj);
-                    }
-                }
-                if (ppl.ContainsKey(checkPos))
-                {
-                    Debug.Log("WOW!");
-                    foreach (Person prsn in ppl[checkPos])
-                    {
-                        memory.AddPerson(current_place.name, checkPos, prsn);
-                    }
-                }
-            }
-        }
-
-
+				//Now we go through and readd everything to to the memory using the new knowledge we have.
+				if (thngs.ContainsKey(checkPos))
+				{
+					foreach (Thing obj in thngs[checkPos])
+					{
+						memory.AddThing(current_place.name, checkPos, obj);
+					}
+				}
+				if (ppl.ContainsKey(checkPos))
+				{
+					Debug.Log("WOW!");
+					foreach (Person prsn in ppl[checkPos])
+					{
+						memory.AddPerson(current_place.name, checkPos, prsn);
+					}
+				}
+			}
+		}
 
 
-        //Tick hunger / social stat.
-        if (needs["hunger"] < 1)
-        {
-            needs["hunger"] += 0.1f;
-        }
 
-        if (needs["social"] < 1)
-        {
-            needs["social"] += (1.5f - features_float["introversion"]) * 0.1f;
-        }
+
+		//Tick hunger / social stat.
+		if (needs["hunger"] < 1)
+		{
+			needs["hunger"] += 0.1f;
+		}
+
+		if (needs["social"] < 1 && !in_conversation)
+		{
+			needs["social"] += (1.5f - features_float["introversion"]) * 0.0245f;
+		}
+
+		if (features_float["fear"] > .1f)
+			features_float["fear"] -= .05f;
+
+		needs["social"] = Mathf.Clamp01(needs["social"]);
     }
 
     //Perform actions based on memory.
@@ -319,23 +324,23 @@ public class Person {
 		bool exitConv = false;
 
         //He wants to talk.
-        if (needs["social"] > 0.45f || in_conversation)
+        if ((needs["social"] > 0.45f || in_conversation) && features_float["fear"] < .3f)
         {
 			float lineFeeling = 0;
             Person x = memory.GetRandomPerson(current_place);
             if(x == null)
             {
                 return "There is no one around to talk to.";
-            }
+			}
             Line l;
             float personFeeling = 0;
 			float randomMod = UnityEngine.Random.value;
 			if (preferences.has("person"))
-				personFeeling = preferences.get("person", x.name) + features_float["chill"] / 2 - features_float["anger"] / 2;
+				personFeeling = preferences.get("person", x.name) - features_float["anger"] / 5;
 			else
 			{
-				preferences.set("person", x.name, "character", 0);  //should implement immediate judgement based on personality
-				personFeeling = preferences.get("person", x.name) + features_float["chill"] / 2 - features_float["anger"] / 2;
+				preferences.set("person", x.name, "character", 0);
+				personFeeling = preferences.get("person", x.name) - features_float["anger"] / 5;
 			}
 			personFeeling = Mathf.Clamp(personFeeling, -1, 1);
 			Line lastLine = memory.GetLine(x);
@@ -353,7 +358,8 @@ public class Person {
 			else	//continues current conversation
 			{
 				float agg = lastLine.aggregateLine();
-				lineFeeling = -.05f * features_float["introversion"];
+				lineFeeling = -.05f * (features_float["introversion"] + 1);
+				//Main.print(lastLine.getLineString() + " : " + agg);	//USE LATER
 
 				string response = memory.DetermineAppropriateLine();
 
@@ -362,17 +368,17 @@ public class Person {
 				{
 					if (agg > 0)
 					{
-						lineFeeling = -.01f * features_float["introversion"];
-						preferences.mod("person", x.name, "character", agg / 5);
+						lineFeeling = -.01f * (features_float["introversion"] + 1);
+						preferences.mod("person", x.name, "character", agg / 100);
 
 						if (preferences.get("person", "gender", x.GetFeaturesString()["gender"]) > .5f)
-							features_float["libido"] += agg / 10;
+							needs["libido"] += agg / 10;
 					}
 					else
 					{
 						lineFeeling = -.07f * (features_float["introversion"] + 1);
-						preferences.mod("person", x.name, "character", (agg / 2) * (1 - features_float["chill"]));
-						features_float["stress"] -= agg / 20;
+						preferences.mod("person", x.name, "character", (agg / 50) * (1 - features_float["chill"]));
+						needs["stress"] -= agg / 20;
 						features_float["fear"] -= agg / 10;
 					}
 
@@ -384,7 +390,7 @@ public class Person {
 				else if (lastLine.about != null)
 				{
 					float f = .25f - Mathf.Abs(preferences.get(lastLine.type.ToString(), lastLine.about.expression) - agg);
-					preferences.mod("person", x.name, "character", f / 5);
+					preferences.mod("person", x.name, "character", (f / 40) * (1 - features_float["chill"]));
 
 					features_float["anger"] -= f / 5;
 					features_float["disgust"] -= f / 5;
@@ -394,32 +400,31 @@ public class Person {
 				//responding to last line
 				if (lastLine.type == Enums.lineTypes.threatDirected)
 				{
-					lineFeeling = -.2f * (features_float["introversion"] + 1);
+					lineFeeling = -.2f * (features_float["introversion"] + 2);
+					features_float["fear"] += .3f;
 					l = c.speak(this, x, x, personFeeling, -1);
-					exitConv = true;
-					MonoBehaviour.print("RESPONDSE TO THREATE");
 				}
 				else if (personFeeling < -.5f || agg < .7f)
 				{
 					lineFeeling = -.05f * (features_float["introversion"] + 1);
 					l = c.speak(this, x, x, personFeeling, -1);
-					preferences.mod("person", x.name, "character", -(features_float["anger"] + features_float["stress"] + features_float["disgust"]) / 5);
+					preferences.mod("person", x.name, "character", -(features_float["anger"] + needs["stress"] + features_float["disgust"]) / 80);
 				}
 				else if (response == "greeting")
 				{
 					l = c.speak(this, x, "greeting", personFeeling, -1);
 					float sm = needs["social"] - .45f;
-					preferences.mod("person", x.name, "character", sm + features_float["chill"] - (features_float["anger"] + features_float["stress"] + features_float["disgust"]) / 5);
+					preferences.mod("person", x.name, "character", sm / 10 + features_float["chill"] / 40 - (features_float["anger"] + needs["stress"] + features_float["disgust"]) / 75);
 				}
 				else
 				{
 					if (Mathf.Abs(personFeeling) <= .1f)
 					{
-						float f = .7f + randomMod / 5;
-						string closest = preferences.getClosestMatchingAny(f, x.name);
+						string closest = preferences.getClosestMatchingAny(randomMod, x.name);
 
 						string[] fs = closest.Split(splitPercent);
 						l = c.speak(this, x, closest, preferences.get(fs[0], fs[1], fs[2]), -1);
+						Main.print("HALPEN");
 					}
 					else if (personFeeling > .3f)
 					{
@@ -427,6 +432,7 @@ public class Person {
 							l = c.speak(this, x, x, personFeeling, -1);
 						else
 						{
+							Main.print("HALPEN");
 							string closest = preferences.getClosestMatchingAny(randomMod * 2 - 1, x.name);
 							string[] fs = closest.Split(splitPercent);
 							l = c.speak(this, x, closest, preferences.get(fs[0], fs[1], fs[2]), -1);
@@ -439,18 +445,42 @@ public class Person {
 							l = c.speak(this, x, x, personFeeling, -1);
 						else
 						{
-							string closest = preferences.getClosestMatchingAny(randomMod - 1, "ignore");
+							string closest = preferences.getClosestMatchingAny(randomMod - 1, x.name);
 							string[] fs = closest.Split(splitPercent);
 							l = c.speak(this, x, closest, preferences.get(fs[0], fs[1], fs[2]), -1);
 						}
 					}
 				}
 			}
+			
+			if (needs["social"] < .2f && x.needs["social"] < .3f || features_float["fear"] > .5f)
+			{
+				exitConv = true;
+			}
+
+			if (exitConv)
+			{
+				in_conversation = false;
+				x.in_conversation = false;
+				if (features_float["fear"] > .5f)
+					return name + " is too spooked to talk right now.";
+				else
+					return name + " is finished talking.";
+			}
+
+
 			AddLine(this, l);
             x.AddLine(this,l);
             ret += l.getLineString();
 			needs["social"] += lineFeeling;
+
+			features_float["anger"] = Mathf.Clamp01(features_float["anger"]);
+			features_float["sadness"] = Mathf.Clamp01(features_float["sadness"]);
+			features_float["happiness"] = Mathf.Clamp01(features_float["happiness"]);
+			features_float["disgust"] = Mathf.Clamp01(features_float["disgust"]);
+			features_float["fear"] = Mathf.Clamp01(features_float["fear"]);
         }
+
         return ret;
     }
 

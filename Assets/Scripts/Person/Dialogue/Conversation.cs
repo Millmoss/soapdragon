@@ -34,15 +34,13 @@ public class Conversation
 
 			Expression[] eList = new Expression[lineStrings.Count];
 
-			Noun aboutNoun = null;
+			Noun aboutNoun = new Noun(person.name, Enums.generalTypes.person, person.name);
 
 			for (int i = 0; i < lineStrings.Count; i++)
 			{
 				if (lineStrings[i][0] == '%')
 				{
 					Expression e = determineExpression(from, to, person.name, feeling, lineStrings[i], type, lower);
-					if (e is Noun)
-						aboutNoun = (Noun)e;
 					eList[i] = e;
 				}
 				else
@@ -172,7 +170,7 @@ public class Conversation
 					Enums.descriptors d;
 					if (feeling > .5f)
 						d = Enums.descriptors.loving;
-					else if (feeling > .0f)		//these are not mutually exclusive or anything, fix this later for sure
+					else if (feeling > .0f)
 						d = Enums.descriptors.friendly;
 					else if (feeling < -.66f)
 						d = Enums.descriptors.hostile;
@@ -198,7 +196,7 @@ public class Conversation
 					Enums.descriptors d;
 					if (feeling > .5f)
 						d = Enums.descriptors.loving;
-					else if (feeling > .0f)     //these are not mutually exclusive or anything, fix this later for sure
+					else if (feeling > .0f)
 						d = Enums.descriptors.friendly;
 					else if (feeling < -.666f)
 						d = Enums.descriptors.hostile;
@@ -228,18 +226,16 @@ public class Conversation
 					else
 					{
 						string[] ns = about.Split(splitPercent);
-						Noun n = new Noun(ns[1], Enums.generalTypes.thing, ns[1]);
+						Noun n = new Noun(ns[2], Enums.generalTypes.thing, ns[2]);
 						e = n;
 					}
 					break;
 				}
 				case "%noun%feature":
 				{
-					char[] splitPercent = new char[1];
-					splitPercent[0] = '%';
 					Noun n;
-					string f = about.Split(splitPercent)[2];
-					n = new Noun(f, Enums.generalTypes.feature, about.Split(splitPercent)[1]);
+					string f = about.Split(splitPercent)[1];
+					n = new Noun(f, Enums.generalTypes.feature, about.Split(splitPercent)[2]);
 					e = n;
 					break;
 				}

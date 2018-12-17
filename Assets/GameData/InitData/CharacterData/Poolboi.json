@@ -52,7 +52,7 @@
 	"preferences":
 	[
 		"person%Jane%character:0.3",
-		"person%gender%male:1.0",
+		"person%gender%male:0.9",
 		"person%hair%blue:0.9",
 		"person%hair%red:0.5",
 		"person%muscle%0.6:0.1",

@@ -1,0 +1,66 @@
+{
+	"comment0"	: "initialization info",
+	
+	"xPosition"	: 1,
+	"yPosition" : 3,
+	"rotation"	: 2,
+	
+	"name" 		: "Brian",
+	
+	"comment1"	: "physical",
+	
+	"eyesight"	: 6,
+	"muscle"	: 0.7,
+	"fat"		: 0.4,
+	"height"	: 6.1,
+	"weight"	: 252.0,
+	"beauty"	: 0.5,
+	
+	"comment2"		: "mental",
+	
+	"wit"			: 0.7,
+	"chill"			: 0.5,
+	"introversion"	: -0.3,
+	
+	"comment3"	: "emotion",
+	
+	"happiness"	: 0.7,
+	"sadness"	: 0.1,
+	"anger"		: 0.0,
+	"fear"		: 0.0,
+	"disgust"	: 0.1,
+	
+	"comment4"	: "motivators",
+	
+	"hunger"	: 0.5,
+	"thirst"	: 0.4,
+	"tiredness"	: 0.7,
+	"social"	: 0.3,
+	"stress"	: 0.2,
+	"libido"	: 0.1,
+	
+	"features"	:
+	[
+		"gender%male",
+		"hair%brown",
+		"eyes%green",
+		"voice%manly",
+		"skin%dark"
+	],
+	
+	"preferences":
+	[
+		"person%Boy Pool%character:0.05",
+		"person%gender%male:0.3",
+		"person%hair%blue:0.2",
+		"person%hair%red:0.4",
+		"person%physical%muscle:1.0",
+		"person%mental%wit:0.3",
+		"person%eyes%brown:0.3",
+		"person%eyes%red:0.3",
+		"person%gender%female:0.9",
+		"person%gender%nonbinary:0.95"
+	],
+	
+	"comment5"	: "add memory later"
+}

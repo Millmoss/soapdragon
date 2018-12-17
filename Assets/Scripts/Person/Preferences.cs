@@ -62,8 +62,8 @@ public class Preferences
 	public bool has(string category, string feature, string type)
 	{
 		if (preferences.ContainsKey(category))
-			if (preferences.ContainsKey(feature))
-				return preferences.ContainsKey(type);
+			if (preferences[category].ContainsKey(feature))
+				return preferences[category][feature].ContainsKey(type);
 
 		return false;
 	}
@@ -95,7 +95,7 @@ public class Preferences
 	{
 		if (preferences.ContainsKey(category))
 		{
-			if (preferences.ContainsKey(feature))
+			if (preferences[category].ContainsKey(feature))
 			{
 				float div = 0;
 				float prefAvg = 0;
@@ -118,9 +118,9 @@ public class Preferences
 	{
 		if (preferences.ContainsKey(category))
 		{
-			if (preferences.ContainsKey(feature))
+			if (preferences[category].ContainsKey(feature))
 			{
-				if (preferences.ContainsKey(type))
+				if (preferences[category][feature].ContainsKey(type))
 				{
 					return preferences[category][feature][type];
 				}
@@ -136,11 +136,11 @@ public class Preferences
 		{
 			preferences.Add(category, new Dictionary<string, Dictionary<string, float>>());
 		}
-		if (!preferences.ContainsKey(feature))
+		if (!preferences[category].ContainsKey(feature))
 		{
 			preferences[category].Add(feature, new Dictionary<string, float>());
 		}
-		if (!preferences.ContainsKey(type))
+		if (!preferences[category][feature].ContainsKey(type))
 		{
 			preferences[category][feature].Add(type, value);
 		}
@@ -156,11 +156,11 @@ public class Preferences
 		{
 			preferences.Add(category, new Dictionary<string, Dictionary<string, float>>());
 		}
-		if (!preferences.ContainsKey(feature))
+		if (!preferences[category].ContainsKey(feature))
 		{
 			preferences[category].Add(feature, new Dictionary<string, float>());
 		}
-		if (!preferences.ContainsKey(type))
+		if (!preferences[category][feature].ContainsKey(type))
 		{
 			preferences[category][feature].Add(type, value);
 			return false;
@@ -180,7 +180,7 @@ public class Preferences
 		float dif = 2;
 		foreach (string f in fs.Keys)
 		{
-			if (preferences.ContainsKey("person") && preferences.ContainsKey(f) && preferences.ContainsKey(fs[f]))
+			if (preferences.ContainsKey("person") && preferences["person"].ContainsKey(f) && preferences["person"][f].ContainsKey(fs[f]))
 			{
 				float v = preferences["person"][f][fs[f]];
 				if (Mathf.Abs(value - v) < dif)
