@@ -5,6 +5,8 @@ using UnityEngine;
 public class Preferences
 {
 	private Dictionary<string, Dictionary<string, Dictionary<string, float>>> preferences;
+	private char[] splitColon;
+	private char[] splitPercent;
 
 	public Preferences()
 	{
@@ -14,9 +16,9 @@ public class Preferences
 	public Preferences(string[] pdp)
 	{
 		preferences = new Dictionary<string, Dictionary<string, Dictionary<string, float>>>();
-		char[] splitPercent = new char[1];
+		splitPercent = new char[1];
 		splitPercent[0] = '%';
-		char[] splitColon = new char[1];
+		splitColon = new char[1];
 		splitColon[0] = ':';
 
 		for (int i = 0; i < pdp.Length; i++)
@@ -171,7 +173,7 @@ public class Preferences
 		}
 	}
 
-	public string getClosestMatching(Person prsn, float value)
+	public string getClosestMatchingPerson(Person prsn, float value)
 	{
 		Dictionary<string, string> fs = prsn.GetFeaturesString();
 		string index = "null";
@@ -189,5 +191,42 @@ public class Preferences
 			}
 		}
 		return index;
+	}
+
+	public string getClosestMatchingAny(float value, string exc)
+	{
+		string indexa = "null";
+		string indexb = "null";
+		string indexc = "null";
+		float dif = 2;
+		foreach (string f in preferences.Keys)
+		{
+			foreach (string ff in preferences[f].Keys)
+			{
+				if (ff != exc)
+				{
+					float v = get(f, ff);
+					if (Mathf.Abs(value - v) < dif)
+					{
+						indexa = f;
+						indexb = ff;
+						dif = Mathf.Abs(value - v);
+					}
+				}
+			}
+		}
+
+		dif = 2;
+		foreach (string f in preferences[indexa][indexb].Keys)
+		{
+			float v = preferences[indexa][indexb][f];
+			if (Mathf.Abs(value - v) < dif)
+			{
+				indexc = f;
+				dif = Mathf.Abs(value - v);
+			}
+		}
+
+		return indexa + "%" + indexb + "%" + indexc;
 	}
 }

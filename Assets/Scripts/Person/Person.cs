@@ -194,7 +194,7 @@ public class Person {
         float dif = float.MaxValue;
         string feature = "";
 
-		feature = preferences.getClosestMatching(prsn, feeling);
+		feature = preferences.getClosestMatchingPerson(prsn, feeling);
 
         return feature;
     }
@@ -316,6 +316,7 @@ public class Person {
     private string PerformSpeaking()
     {
         string ret = "";
+		bool exitConv = false;
 
         //He wants to talk.
         if (needs["social"] > 0.45f || in_conversation)
@@ -327,22 +328,125 @@ public class Person {
                 return "There is no one around to talk to.";
             }
             Line l;
-            float feeling = 0;
-            if (preferences.has("person"))
-                feeling = preferences.get("person", x.name);
-			if (memory.GetLine(x) == null)
-				l = c.speak(this, x, x, feeling, -1);
+            float personFeeling = 0;
+			float randomMod = UnityEngine.Random.value;
+			if (preferences.has("person"))
+				personFeeling = preferences.get("person", x.name) + features_float["chill"] / 2 - features_float["anger"] / 2;
 			else
 			{
-				float agg = memory.GetLine(x).aggregateLine();
-				if (UnityEngine.Random.value < .5f)
-					l = c.speak(this, x, memory.GetLine(x), feeling + agg, -1);
+				preferences.set("person", x.name, "character", 0);  //should implement immediate judgement based on personality
+				personFeeling = preferences.get("person", x.name) + features_float["chill"] / 2 - features_float["anger"] / 2;
+			}
+			personFeeling = Mathf.Clamp(personFeeling, -1, 1);
+			Line lastLine = memory.GetLine(x);
+			if (lastLine == null)	//starts new conversation
+			{
+				if (personFeeling > -.5f)
+				{
+					l = c.speak(this, x, "greeting", personFeeling, -1);
+				}
 				else
 				{
-					//l = c.speak(this, x, null_object, 
-					l = c.speak(this, x, memory.GetLine(x), feeling + agg, -1);
+					l = c.speak(this, x, x, personFeeling, -1);
 				}
 			}
+			else	//continues current conversation
+			{
+				float agg = lastLine.aggregateLine();
+				lineFeeling = -.05f * features_float["introversion"];
+
+				string response = memory.DetermineAppropriateLine();
+
+				//determining feeling toward last line
+				if (lastLine.about != null && lastLine.about.expression == name && Mathf.Abs(agg) > .3f)
+				{
+					if (agg > 0)
+					{
+						lineFeeling = -.01f * features_float["introversion"];
+						preferences.mod("person", x.name, "character", agg / 5);
+
+						if (preferences.get("person", "gender", x.GetFeaturesString()["gender"]) > .5f)
+							features_float["libido"] += agg / 10;
+					}
+					else
+					{
+						lineFeeling = -.07f * (features_float["introversion"] + 1);
+						preferences.mod("person", x.name, "character", (agg / 2) * (1 - features_float["chill"]));
+						features_float["stress"] -= agg / 20;
+						features_float["fear"] -= agg / 10;
+					}
+
+					features_float["sadness"] -= agg / 10;
+					features_float["happiness"] += agg / 10;
+					features_float["anger"] -= agg / 5;
+					features_float["disgust"] -= agg / 15;
+				}
+				else if (lastLine.about != null)
+				{
+					float f = .25f - Mathf.Abs(preferences.get(lastLine.type.ToString(), lastLine.about.expression) - agg);
+					preferences.mod("person", x.name, "character", f / 5);
+
+					features_float["anger"] -= f / 5;
+					features_float["disgust"] -= f / 5;
+					features_float["happiness"] += f / 10;
+				}
+
+				//responding to last line
+				if (lastLine.type == Enums.lineTypes.threatDirected)
+				{
+					lineFeeling = -.2f * (features_float["introversion"] + 1);
+					l = c.speak(this, x, x, personFeeling, -1);
+					exitConv = true;
+					MonoBehaviour.print("RESPONDSE TO THREATE");
+				}
+				else if (personFeeling < -.5f || agg < .7f)
+				{
+					lineFeeling = -.05f * (features_float["introversion"] + 1);
+					l = c.speak(this, x, x, personFeeling, -1);
+					preferences.mod("person", x.name, "character", -(features_float["anger"] + features_float["stress"] + features_float["disgust"]) / 5);
+				}
+				else if (response == "greeting")
+				{
+					l = c.speak(this, x, "greeting", personFeeling, -1);
+					float sm = needs["social"] - .45f;
+					preferences.mod("person", x.name, "character", sm + features_float["chill"] - (features_float["anger"] + features_float["stress"] + features_float["disgust"]) / 5);
+				}
+				else
+				{
+					if (Mathf.Abs(personFeeling) <= .1f)
+					{
+						float f = .7f + randomMod / 5;
+						string closest = preferences.getClosestMatchingAny(f, x.name);
+
+						string[] fs = closest.Split(splitPercent);
+						l = c.speak(this, x, closest, preferences.get(fs[0], fs[1], fs[2]), -1);
+					}
+					else if (personFeeling > .3f)
+					{
+						if (UnityEngine.Random.value > .7f)
+							l = c.speak(this, x, x, personFeeling, -1);
+						else
+						{
+							string closest = preferences.getClosestMatchingAny(randomMod * 2 - 1, x.name);
+							string[] fs = closest.Split(splitPercent);
+							l = c.speak(this, x, closest, preferences.get(fs[0], fs[1], fs[2]), -1);
+						}
+					}
+					else
+					{
+						lineFeeling = -.05f * (features_float["introversion"] + 1);
+						if (UnityEngine.Random.value > .5f)
+							l = c.speak(this, x, x, personFeeling, -1);
+						else
+						{
+							string closest = preferences.getClosestMatchingAny(randomMod - 1, "ignore");
+							string[] fs = closest.Split(splitPercent);
+							l = c.speak(this, x, closest, preferences.get(fs[0], fs[1], fs[2]), -1);
+						}
+					}
+				}
+			}
+			AddLine(this, l);
             x.AddLine(this,l);
             ret += l.getLineString();
 			needs["social"] += lineFeeling;
