@@ -55,7 +55,7 @@ public class PolyTerrain : MonoBehaviour
 
 	void Update()
 	{
-
+		print(getNormal(1.09f, 2.5f));
 	}
 
 	public GameObject polyTerrain(int xStart, int zStart, GameObject polyTerrainMesh)
