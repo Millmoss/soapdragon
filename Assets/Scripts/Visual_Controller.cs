@@ -6,7 +6,7 @@ using UnityEngine.Tilemaps;
 public class Visual_Controller : MonoBehaviour {
 
     public Tilemap tm_ppl, tm_things;
-    public Tile prsn, thng;
+    public Tile prsna, prsnb, prsnc, thng;
     public List<Vector3Int> prev_pos;
     public List<Person> ppl;
     public List<Thing> thngs;
@@ -21,9 +21,23 @@ public class Visual_Controller : MonoBehaviour {
     public void AddPerson(Person p)
     {
         Vector3Int pos = new Vector3Int(p.Position.x, p.Position.y,0);
-        tm_ppl.SetTile(pos,prsn);
-        
-        Matrix4x4 m = Matrix4x4.TRS(Vector3.zero,
+		if (ppl.Count == 0)
+		{
+			tm_ppl.SetTile(pos, prsna);
+			print(p.name + "reD");
+		}
+		if (ppl.Count == 1)
+		{
+			tm_ppl.SetTile(pos, prsnb);
+			print(p.name + "bkl");
+		}
+		if (ppl.Count == 2)
+		{
+			tm_ppl.SetTile(pos, prsnc);
+			print(p.name + "gre");
+		}
+
+		Matrix4x4 m = Matrix4x4.TRS(Vector3.zero,
             Quaternion.Euler(0,0,Enums.GetRotation(p.rotation)), 
             Vector3.one);
         tm_ppl.SetTransformMatrix(pos, m);
@@ -50,8 +64,13 @@ public class Visual_Controller : MonoBehaviour {
         for (int i = 0; i < ppl.Count; i++)
         {
             Vector3Int pos = new Vector3Int(ppl[i].Position.x, ppl[i].Position.y, 0);
-            tm_ppl.SetTile(pos, prsn);
-            Matrix4x4 m = Matrix4x4.TRS(Vector3.zero,
+			if (i == 0)
+				tm_ppl.SetTile(pos, prsna);
+			if (i == 1)
+				tm_ppl.SetTile(pos, prsnb);
+			if (i == 2)
+				tm_ppl.SetTile(pos, prsnc);
+			Matrix4x4 m = Matrix4x4.TRS(Vector3.zero,
                 Quaternion.Euler(0, 0, Enums.GetRotation(ppl[i].rotation)),
                 Vector3.one);
             tm_ppl.SetTransformMatrix(pos, m);
