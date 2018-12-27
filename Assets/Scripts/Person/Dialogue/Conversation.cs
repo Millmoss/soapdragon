@@ -5,7 +5,7 @@ public class Conversation
 {
 	private LineLibrary ll;
 	private ExpressionLibrary el;
-	private char[] splitPercent;
+	private readonly char[] splitPercent;
 
 	public Conversation()
 	{
